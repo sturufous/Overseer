@@ -3,11 +3,11 @@
     <style>
         @import 'https://code.highcharts.com/css/highcharts.css';
         .highcharts-background {
-            fill: #222;
+            fill: #FFF;
             }
             .highcharts-title,
             .highcharts-axis-title {
-            fill: #DDD;
+            fill: #333;
             }
             .highcharts-credits,
             .highcharts-credits:hover {
@@ -15,19 +15,30 @@
         }
 
         body {
-            background-color: #222;
+            background-color: #FFF;
             margin 0 !important;
         }
 
-        #container {
+        #container1 {
             margin: 0;
             padding: 0;
             border: 0;
-            background-color: #222;
+            background-color: #888;
             min-height: 400px;
-            height:95%;
+            height:500px;
             width:95%;
-            position:absolute;
+            position:relative;
+        }
+
+        #container2 {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background-color: #888;
+            min-height: 400px;
+            height:500px;
+            width:95%;
+            position:relative;
         }
     </style>
 
@@ -41,20 +52,78 @@
 <body>
     <script src="https://code.highcharts.com/js/highcharts.js"></script>
 
-    <div id="container"></div>
+    <div id="container1"></div>
+
+    <div id="container2"></div>
 
     <script>
     // Chart
-    var options = {
+    var options1 = {
         
+        chart: {
+            type: 'spline',
+            events: {
+                load: getData1
+            }
+        },
+        title: {
+            text: 'Jorel2 Test Server - Last Thread Duration'
+        },
+        xAxis: {
+            type: 'datetime',
+        },
+        yAxis: {
+            title: {
+            text: 'Thread Duration (seconds)'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
+        series: [{
+            name: 'Thread Duration (seconds)',
+            data: []
+        }]
+    };
+    var chart1 = Highcharts.chart('container1', options1)
+    
+    // Data
+    function getData1() {
+        setInterval(function() {
+            Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }});
+
+            var series = chart1.series[0];
+            if (series.data.length > 1000) {
+                series.data[0].remove(false, false)
+            }
+
+            fetch('http://localhost:8080/lastduration?host=142.36.95.20&port=1089').then(function(response) {
+            return response.json()
+            }).then(function(data) {
+                chart1.series[0].addPoint({ x: data.timestamp, y: Number(data.duration) })
+            })
+        }, 3000)
+    }
+    </script>
+
+<script>
+// Chart
+var options2 = {
+    
     chart: {
         type: 'spline',
         events: {
-            load: getData
+            load: getData2
         }
     },
     title: {
-        text: 'Jorel2 Server Thread Duration (seconds)'
+        text: 'Jorel2 Production Server - Last Thread Duration'
     },
     xAxis: {
         type: 'datetime',
@@ -72,32 +141,32 @@
     },
     series: [{
         name: 'Thread Duration (seconds)',
-        turboThreshold: 10,
         data: []
     }]
-    };
-    var chart = Highcharts.chart('container', options)
-    
-    // Data
-    function getData() {
-        setInterval(function() {
-            Highcharts.setOptions({
-            global: {
-                useUTC: false
-            }});
+};
+var chart2 = Highcharts.chart('container2', options2)
 
-            var series = chart.series[0];
-            if (series.data.length > 10) {
-                series.data[0].remove(false, false)
-            }
+// Data
+function getData2() {
+    setInterval(function() {
+        Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }});
 
-            fetch('http://localhost:8080/?testvar=stu').then(function(response) {
-            return response.json()
-            }).then(function(data) {
-            chart.series[0].addPoint({ x: data.timestamp, y: Number(data.duration) })
-            })
-        }, 3000)
-    }
-    </script>
+        var series = chart2.series[0];
+        if (series.data.length > 1000) {
+            series.data[0].remove(false, false)
+        }
+
+        fetch('http://localhost:8080/lastduration?host=142.36.15.205&port=1089').then(function(response) {
+        return response.json()
+        }).then(function(data) {
+            chart2.series[0].addPoint({ x: data.timestamp, y: Number(data.duration) })
+        })
+    }, 3000)
+}
+</script>
+
 </body>
 </html>

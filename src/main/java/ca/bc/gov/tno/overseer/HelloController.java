@@ -1,6 +1,15 @@
 package ca.bc.gov.tno.overseer;
 
-import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.management.Attribute;
+import javax.management.AttributeList;
+import javax.management.MBeanServerConnection;
+import javax.management.ObjectName;
+import javax.management.remote.JMXConnector;
+import javax.management.remote.JMXConnectorFactory;
+import javax.management.remote.JMXServiceURL;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,54 +23,56 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloController {
+	 
+	Map<String, MBeanServerConnection> mbeanConnections = new ConcurrentHashMap<>();
 	
 	@CrossOrigin(origins = {"*"})
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Tester> hello(@RequestParam String testvar) {
-    	//HISeries chart = new HISeries();
- 	    HttpHeaders responseHeaders = new HttpHeaders();
- 	    responseHeaders.set("Content-Type", "application/json");
- 	    Tester tester = new Tester();
- 	    tester.setDuration(Long.valueOf((long) (Math.random() * 1000)));
-    	return new ResponseEntity<Tester>(tester, responseHeaders, HttpStatus.CREATED);
-    }
-}
-
-class Tester {
-	Long duration = 0L;
-	Long timestamp = new Date().getTime();
-	Boolean success = true;
-	String error = "No Error.";
+    @RequestMapping(value = "/lastduration", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<OverseerResponse> hello(@RequestParam String host, @RequestParam String port) {
+		
+		ResponseEntity<OverseerResponse> output = null; 
+		JMXServiceURL url = null;
+		JMXConnector connection = null;
+		MBeanServerConnection mbsc = null;
+		
+	    try {
+	 	    HttpHeaders responseHeaders = new HttpHeaders();
+	 	    responseHeaders.set("Content-Type", "application/json");
+	 	    
+	 	    if(!mbeanConnections.containsKey(host)) {
+		 		url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/jmxrmi");
+		 		connection = JMXConnectorFactory.connect(url);
+		 		mbsc = connection.getMBeanServerConnection();
+		 		mbeanConnections.put(host, mbsc);
+	 	    } else {
+	 	    	mbsc = mbeanConnections.get(host);
+	 	    }
+	 	    
+	 	    ObjectName objName = new ObjectName("Jorel2Instance:name=jorel2Mbean");
+	 		
+	 		String[] attributes = {"LastDuration", "AppConnectionStatusStr", "AppDatabaseProfileName", "AppInstanceName", "AppInstanceRunTime", 
+	 				"AppStartTime", "ThreadCompleteCount", "ThreadMaxDurationSeconds", "ThreadMinDurationSeconds"};
+	 			    
+	 		AttributeList attrs = mbsc.getAttributes(objName, attributes);
+	 		
+	 		Attribute duration = (Attribute) attrs.get(0);
+	 		OverseerResponse response = new OverseerResponse();
+	 		response.setDuration((Long) ((Attribute) attrs.get(0)).getValue());
+	 		response.setConnectionStatus((String) ((Attribute) attrs.get(1)).getValue());
+	 		response.setDbProfileName((String) ((Attribute) attrs.get(2)).getValue());
+	 		response.setInstanceName((String) ((Attribute) attrs.get(3)).getValue());
+	 		response.setInstanceRunTime((String) ((Attribute) attrs.get(4)).getValue());
+	 		response.setStartTime((String) ((Attribute) attrs.get(5)).getValue());
+	 		response.setThreadsCompleted((Integer) ((Attribute) attrs.get(6)).getValue());
+	 		response.setMaxDuration((Long) ((Attribute) attrs.get(7)).getValue());
+	 		response.setMinDuration((Long) ((Attribute) attrs.get(8)).getValue());
+	 		
+	 	    output = new ResponseEntity<OverseerResponse>(response, responseHeaders, HttpStatus.CREATED);
 	
-	public Long getDuration() {
-		return duration;
-	}
-	
-	public void setDuration(Long value) {
-		this.duration = value;
-	}
-	
-	public Long getTimestamp() {
-		return timestamp;
-	}
-	
-	public void setTimestamp(Long value) {
-		this.timestamp = value;
-	}
-	
-	public Boolean getSuccess() {
-		return success;
-	}
-	
-	public void setSuccess(Boolean success) {
-		this.success = success;
-	}
-	
-	public String getError() {
-		return error;
-	}
-	
-	public void setError(String error) {
-		this.error = error;
+	    } catch (Exception e) {
+	    	System.out.println(e);
+	    }
+		
+		return output;
 	}
 }

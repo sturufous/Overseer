@@ -48,6 +48,14 @@
 		    <artifactId>highcharts</artifactId>
 		    <version>8.0.4</version>
 		</dependency>
+		 <!-- https://mvnrepository.com/artifact/com.sun/tools -->
+		<dependency>
+		    <groupId>com.sun.tools</groupId>
+		    <artifactId>tools</artifactId>
+		    <version>1.8</version>
+		    <scope>system</scope>
+			<systemPath>${project.basedir}/lib/tools.jar</systemPath>
+		</dependency>
     </dependencies>
     <build>
         <plugins>
