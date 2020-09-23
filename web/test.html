@@ -1,0 +1,103 @@
+<html>
+    <head>
+    <style>
+        @import 'https://code.highcharts.com/css/highcharts.css';
+        .highcharts-background {
+            fill: #222;
+            }
+            .highcharts-title,
+            .highcharts-axis-title {
+            fill: #DDD;
+            }
+            .highcharts-credits,
+            .highcharts-credits:hover {
+            fill: #222;
+        }
+
+        body {
+            background-color: #222;
+            margin 0 !important;
+        }
+
+        #container {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background-color: #222;
+            min-height: 400px;
+            height:95%;
+            width:95%;
+            position:absolute;
+        }
+    </style>
+
+<script>
+    function renderChart() {
+
+     }
+</script>
+</head>
+
+<body>
+    <script src="https://code.highcharts.com/js/highcharts.js"></script>
+
+    <div id="container"></div>
+
+    <script>
+    // Chart
+    var options = {
+        
+    chart: {
+        type: 'spline',
+        events: {
+            load: getData
+        }
+    },
+    title: {
+        text: 'Jorel2 Server Thread Duration (seconds)'
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: {
+        title: {
+        text: 'Thread Duration (seconds)'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    exporting: {
+        enabled: false
+    },
+    series: [{
+        name: 'Thread Duration (seconds)',
+        turboThreshold: 10,
+        data: []
+    }]
+    };
+    var chart = Highcharts.chart('container', options)
+    
+    // Data
+    function getData() {
+        setInterval(function() {
+            Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }});
+
+            var series = chart.series[0];
+            if (series.data.length > 10) {
+                series.data[0].remove(false, false)
+            }
+
+            fetch('http://localhost:8080/?testvar=stu').then(function(response) {
+            return response.json()
+            }).then(function(data) {
+            chart.series[0].addPoint({ x: data.timestamp, y: Number(data.duration) })
+            })
+        }, 3000)
+    }
+    </script>
+</body>
+</html>
