@@ -16,7 +16,7 @@
 
         body {
             background-color: #FFF;
-            margin 0 !important;
+            margin: 0 !important;
         }
 
         #container1 {
