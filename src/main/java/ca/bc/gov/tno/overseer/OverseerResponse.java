@@ -16,6 +16,10 @@ public class OverseerResponse {
 	Integer threadsCompleted = -1;
 	Long maxDuration = -1L;
 	Long minDuration = -1L;
+	int activeThreads = -1;
+	String buildNumber = "Uninitialized";
+	String serverDetails = "Uninitialized";
+	String eventTypesHandled = "Uninitialized";
 	
 	public Long getDuration() {
 		return duration;
@@ -111,5 +115,37 @@ public class OverseerResponse {
 	           
 	public void setMinDuration(Long minDuration) {
 		this.minDuration = minDuration;
+	} 
+	
+	public String getBuildNumber() {
+		return buildNumber;
 	}
+	           
+	public void setBuildNumber(String buildNumber) {
+		this.buildNumber = buildNumber;
+	} 
+	
+	public int getActiveThreads() {
+		return activeThreads;
+	}
+	           
+	public void setActiveThreads(int activeThreads) {
+		this.activeThreads = activeThreads;
+	} 
+
+	public String getServerDetails() {
+		return serverDetails;
+	}
+	           
+	public void setServerDetails(String serverDetails) {
+		this.serverDetails = serverDetails;
+	} 
+	
+	public String getEventTypesHandled() {
+		return eventTypesHandled;
+	}
+	           
+	public void setEventTypesHandled(String eventTypesHandled) {
+		this.eventTypesHandled = eventTypesHandled;
+	} 
 }

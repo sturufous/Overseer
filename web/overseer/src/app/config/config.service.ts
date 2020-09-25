@@ -18,11 +18,16 @@ export interface Config {
   threadsCompleted: number;
   maxDuration: number;
   minDuration: number;
+  buildNumber: string;
+  activeThreads: string;
+  serverDetails: string;
+  connectionStatus: string;
+  eventTypesHandled: string;
 }
 
 @Injectable()
 export class ConfigService {
-  configUrl = 'http://localhost:8080/lastduration?host=142.36.15.205&port=1089';
+  configUrl = 'http://localhost:8080/lastduration?host=142.36.95.20&port=1089';
 
   constructor(private http: HttpClient) { }
 

@@ -29,14 +29,6 @@ export class ConfigComponent {
       );
   }
 
-  showConfig_v1() {
-    this.configService.getConfig_1()
-      .subscribe((data: Config) => this.config = {
-          duration: data.duration,
-          timestamp:  data.timestamp
-      });
-  }
-
   showConfig_v2() {
     this.configService.getConfig()
       // clone the data object, using its known Config shape

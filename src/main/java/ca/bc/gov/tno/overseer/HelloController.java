@@ -50,8 +50,9 @@ public class HelloController {
 	 	    
 	 	    ObjectName objName = new ObjectName("Jorel2Instance:name=jorel2Mbean");
 	 		
-	 		String[] attributes = {"LastDuration", "AppConnectionStatusStr", "AppDatabaseProfileName", "AppInstanceName", "AppInstanceRunTime", 
-	 				"AppStartTime", "ThreadCompleteCount", "ThreadMaxDurationSeconds", "ThreadMinDurationSeconds"};
+	 		String[] attributes = {"LastDuration", "AppConnectionStatusStr", "AppDatabaseProfileName", "AppInstanceName", "AppInstanceRunTime",
+	 				"AppStartTime", "ThreadCompleteCount", "ThreadMaxDurationSeconds", "ThreadMinDurationSeconds","BuildNumber", "ActiveThreads", 
+	 				"ServerDetails", "EventTypesHandled"};
 	 			    
 	 		AttributeList attrs = mbsc.getAttributes(objName, attributes);
 	 		
@@ -66,6 +67,10 @@ public class HelloController {
 	 		response.setThreadsCompleted((Integer) ((Attribute) attrs.get(6)).getValue());
 	 		response.setMaxDuration((Long) ((Attribute) attrs.get(7)).getValue());
 	 		response.setMinDuration((Long) ((Attribute) attrs.get(8)).getValue());
+	 		response.setBuildNumber((String) ((Attribute) attrs.get(9)).getValue());
+	 		response.setActiveThreads((int) ((Attribute) attrs.get(10)).getValue());
+	 		response.setServerDetails((String) ((Attribute) attrs.get(11)).getValue());
+	 		response.setEventTypesHandled((String) ((Attribute) attrs.get(12)).getValue());
 	 		
 	 	    output = new ResponseEntity<OverseerResponse>(response, responseHeaders, HttpStatus.CREATED);
 	

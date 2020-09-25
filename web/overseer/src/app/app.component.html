@@ -91,10 +91,10 @@
 
   .card {
     border-radius: 4px;
-    border: 1px solid #eee;
+    border: 1px solid #ddd;
     background-color: #fafafa;
-    height: 200px;
-    width: 600px;
+    height: 130px;
+    width: 650px;
     margin: 0 8px 16px;
     padding: 16px;
     display: flex;
@@ -344,18 +344,26 @@
 
   <div class="card-container">
     <a class="card" target="_blank" rel="noopener" href="https://angular.io/tutorial">
+      
       <table>
         <tr>
-          <td>Instance</td><td>{{ config.instanceName }}</td>
+          <td rowspan="3">
+            <h2>{{ config.instanceName }}</h2>
+            {{ config.eventTypesHandled }}
+          </td>
+          <td rowspan="3">
+            <img src="assets/{{ connectionImage }}" width="60" height="60" style="padding-left: 20px; padding-right: 20px">
+          </td>
+          <td>DB Profile: </td><td>{{ config.dbProfileName }}</td>
+          <td rowspan="3">
+            <img src="assets/{{ threadImage }}" width="31" height="70" style="padding-left: 20px">
+          </td>
         </tr>
         <tr>
-          <td>DB Profile</td><td>{{ config.dbProfileName }}</td>
+          <td>Active&nbsp;Threads: </td><td>{{ config.activeThreads }}</td>
         </tr>
         <tr>
-          <td>Start time</td><td>{{ config.startTime }}</td>
-        </tr>
-        <tr>
-          <td>Run time</td><td>{{ config.instanceRunTime }}</td>
+          <td>Build Number: </td><td>{{ config.buildNumber }}</td>
         </tr>
       </table>
     </a>
