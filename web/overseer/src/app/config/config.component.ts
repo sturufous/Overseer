@@ -22,7 +22,7 @@ export class ConfigComponent {
   }
 
   showConfig() {
-    this.configService.getConfig()
+    this.configService.getConfig(0)
       .subscribe(
         (data: Config) => this.config = { ...data }, // success path
         error => this.error = error // error path
@@ -30,7 +30,7 @@ export class ConfigComponent {
   }
 
   showConfig_v2() {
-    this.configService.getConfig()
+    this.configService.getConfig(0)
       // clone the data object, using its known Config shape
       .subscribe((data: Config) => this.config = { ...data });
   }

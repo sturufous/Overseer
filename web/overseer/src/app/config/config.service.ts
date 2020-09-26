@@ -11,8 +11,8 @@ export interface Config {
   success: boolean;
   error: string;
   status: string;
-  dbProfile: string;
-  instance: string;
+  dbProfileName: string;
+  instanceName: string;
   runTime: string;
   startTime: string;
   threadsCompleted: number;
@@ -29,10 +29,15 @@ export interface Config {
 export class ConfigService {
   configUrl = 'http://localhost:8080/lastduration?host=142.36.95.20&port=1089';
 
+  configUrls: string[] = [
+    'http://localhost:8080/lastduration?host=142.36.15.205&port=1089',
+    'http://localhost:8080/lastduration?host=142.36.95.20&port=1089'
+    ]
+
   constructor(private http: HttpClient) { }
 
-  getConfig() {
-    return this.http.get<Config>(this.configUrl)
+  getConfig(idx:number) {
+    return this.http.get<Config>(this.configUrls[idx])
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error

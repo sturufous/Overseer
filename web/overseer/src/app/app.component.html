@@ -342,25 +342,25 @@
   <h2>Jorel2 Servers</h2>
   <p>Servers configured in this Overseer build:</p>
 
-  <div class="card-container">
+  <div *ngFor="let config of configs" class="card-container">
     <a class="card" target="_blank" rel="noopener" href="https://angular.io/tutorial">
       
-      <table>
+      <table style="width: 100%">
         <tr>
           <td rowspan="3">
             <h2>{{ config.instanceName }}</h2>
             {{ config.eventTypesHandled }}
           </td>
           <td rowspan="3">
-            <img src="assets/{{ connectionImage }}" width="60" height="60" style="padding-left: 20px; padding-right: 20px">
+            <img src="assets/{{ connectionImageFile(config) }}" width="70" height="70" style="padding-left: 20px; padding-right: 20px">
           </td>
           <td>DB Profile: </td><td>{{ config.dbProfileName }}</td>
           <td rowspan="3">
-            <img src="assets/{{ threadImage }}" width="31" height="70" style="padding-left: 20px">
+            <img src="assets/{{ threadImageFile(config) }}" width="31" height="70" style="padding-left: 20px">
           </td>
         </tr>
         <tr>
-          <td>Active&nbsp;Threads: </td><td>{{ config.activeThreads }}</td>
+          <td>Thread&nbsp;Count: </td><td>{{ config.threadsCompleted }}</td>
         </tr>
         <tr>
           <td>Build Number: </td><td>{{ config.buildNumber }}</td>
