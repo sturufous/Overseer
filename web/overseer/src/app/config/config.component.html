@@ -1,18 +1,46 @@
-<h3>Get configuration from JSON file</h3>
-<div>
-  <button (click)="clear(); showConfig()">get</button>
-  <button (click)="clear(); showConfigResponse()">getResponse</button>
-  <button (click)="clear()">clear</button>
-  <button (click)="clear(); makeError()">error</button>
-  <span *ngIf="config">
-    <p>Heroes API URL is "{{config.heroesUrl}}"</p>
-    <p>Textfile URL is "{{config.textfile}}"</p>
-    <div *ngIf="headers">
-      Response headers:
-      <ul>
-        <li *ngFor="let header of headers">{{header}}</li>
-      </ul>
+<style>
+.content {
+    display: flex;
+    max-width: 960px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  p {
+    margin: 0;
+  }
+
+</style>
+
+<!-- Resources -->
+<div class="content">
+    <h2>Jorel2 Servers</h2>
+    <p>Servers configured in this Overseer build:</p>
+
+    <div *ngFor="let config of configs" class="card-container">
+    <a class="card" target="_blank" rel="noopener" href="https://angular.io/tutorial">
+        
+        <table style="width: 100%">
+        <tr>
+            <td rowspan="3" style="width: 100px">
+            <img src="assets/{{ connectionImageFile(config) }}" width="70" height="70" style="padding-left: 20px; padding-right: 20px">
+            </td>
+            <td rowspan="3" style="width: 200px">
+            <h2>{{ config.instanceName }}</h2>
+            {{ config.eventTypesHandled }}
+            </td>
+            <td>DB Profile: </td><td>{{ config.dbProfileName }}</td>
+            <td rowspan="3">
+            <img src="assets/{{ threadImageFile(config) }}" width="31" height="70" style="padding-left: 20px">
+            </td>
+        </tr>
+        <tr>
+            <td>Thread&nbsp;Count: </td><td>{{ config.threadsCompleted }}</td>
+        </tr>
+        <tr>
+            <td>Build Number: </td><td>{{ config.buildNumber }}</td>
+        </tr>
+        </table>
+    </a>
     </div>
-  </span>
 </div>
-<p *ngIf="error" class="error">{{error | json}}</p>

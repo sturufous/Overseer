@@ -12,6 +12,8 @@ export class ConfigComponent {
   error: any;
   headers: string[];
   config: Config;
+  configs: Config[] = [];
+  interval: any;
 
   constructor(private configService: ConfigService) {}
 
@@ -51,4 +53,5 @@ export class ConfigComponent {
   makeError() {
     this.configService.makeIntentionalError().subscribe(null, error => this.error = error );
   }
+
 }

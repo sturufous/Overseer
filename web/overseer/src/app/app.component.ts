@@ -30,12 +30,15 @@ export class AppComponent {
   ngOnInit() {
     this.interval = setInterval(() => {
       this.displayDuration(0); // api call
-   }, 3000);
+    }, 3000);
 
-   this.interval = setInterval(() => {
-    this.displayDuration(1); // api call
-  }, 3000);
+    this.interval = setInterval(() => {
+      this.displayDuration(1); // api call
+    }, 3000);
 
+    this.interval = setInterval(() => {
+      this.displayDuration(2); // api call
+    }, 3000);
   }
 
   threadImageFile(config:Config) {

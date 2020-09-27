@@ -31,7 +31,8 @@ export class ConfigService {
 
   configUrls: string[] = [
     'http://localhost:8080/lastduration?host=142.36.15.205&port=1089',
-    'http://localhost:8080/lastduration?host=142.36.95.20&port=1089'
+    'http://localhost:8080/lastduration?host=142.36.95.20&port=1089',
+    'http://localhost:8080/lastduration?host=142.36.15.53&port=1089'
     ]
 
   constructor(private http: HttpClient) { }
