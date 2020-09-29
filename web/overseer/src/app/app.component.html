@@ -343,32 +343,7 @@
   </svg>
 
 
-<div *ngFor="let config of configs" class="card-container">
-  <a class="card" target="_blank" rel="noopener" href="https://angular.io/tutorial">
-    
-    <table style="width: 100%">
-      <tr>
-        <td rowspan="3" style="width: 100px">
-          <img src="assets/{{ connectionImageFile(config) }}" width="70" height="70" style="padding-left: 20px; padding-right: 20px">
-        </td>
-        <td rowspan="3" style="width: 200px">
-          <h2>{{ config.instanceName }}</h2>
-          {{ config.eventTypesHandled }}
-        </td>
-        <td>DB Profile: </td><td>{{ config.dbProfileName }}</td>
-        <td rowspan="3">
-          <img src="assets/{{ threadImageFile(config) }}" width="31" height="70" style="padding-left: 20px">
-        </td>
-      </tr>
-      <tr>
-        <td>Thread&nbsp;Count: </td><td>{{ config.threadsCompleted }}</td>
-      </tr>
-      <tr>
-        <td>Build Number: </td><td>{{ config.buildNumber }}</td>
-      </tr>
-    </table>
-  </a>
-</div>
+
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->

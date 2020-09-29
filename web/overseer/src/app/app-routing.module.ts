@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ConfigComponent } from './config/config.component';
+import { ServerListComponent } from './serverlist/serverlist.component';
+import { ServerDetailsComponent } from './serverdetails/serverdetails.component';
 
 const routes: Routes = [
-  { path: 'config', component: ConfigComponent }
+  { path: '', pathMatch: 'full', redirectTo: 'serverlist' },
+  { path: 'serverlist', component: ServerListComponent },
+  { path: 'serverdetails', component: ServerDetailsComponent }
 ];
 
 @NgModule({

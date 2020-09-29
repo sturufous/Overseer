@@ -4,6 +4,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 export interface Config {
   duration: number;
@@ -26,7 +27,7 @@ export interface Config {
 }
 
 @Injectable()
-export class ConfigService {
+export class ServerListService {
   configUrl = 'http://localhost:8080/lastduration?host=142.36.95.20&port=1089';
 
   configUrls: string[] = [
@@ -35,7 +36,7 @@ export class ConfigService {
     'http://localhost:8080/lastduration?host=142.36.15.53&port=1089'
     ]
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
   getConfig(idx:number) {
     return this.http.get<Config>(this.configUrls[idx])
