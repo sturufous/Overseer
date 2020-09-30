@@ -17,10 +17,10 @@ export class ServerListComponent {
   threadImage: string;
   connectionImage: string;
 
-  constructor(private configService: ServerListService) {}
+  constructor(private serverListService: ServerListService) {}
 
   displayDuration(idx:number) {
-    this.configService.getConfig(idx)
+    this.serverListService.getConfig(idx)
       .subscribe(
         (data: Server) => this.configs[idx] = { ...data }, // success path
         error => this.error = error // error path
@@ -31,35 +31,6 @@ export class ServerListComponent {
     this.configs = undefined;
     this.error = undefined;
     this.headers = undefined;
-  }
-
-  showConfig() {
-    this.configService.getConfig(0)
-      .subscribe(
-        (data: Server) => this.config = { ...data }, // success path
-        error => this.error = error // error path
-      );
-  }
-
-  showConfig_v2() {
-    this.configService.getConfig(0)
-      // clone the data object, using its known Config shape
-      .subscribe((data: Server) => this.config = { ...data });
-  }
-
-  showConfigResponse() {
-    this.configService.getConfigResponse()
-      // resp is of type `HttpResponse<Config>`
-      .subscribe(resp => {
-        // display its headers
-        const keys = resp.headers.keys();
-        this.headers = keys.map(key =>
-          `${key}: ${resp.headers.get(key)}`);
-
-      });
-  }
-  makeError() {
-    this.configService.makeIntentionalError().subscribe(null, error => this.error = error );
   }
 
   ngOnInit() {

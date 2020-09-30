@@ -46,22 +46,6 @@ export class ServerListService {
       );
   }
 
-  getConfig_1() {
-    return this.http.get(this.configUrl);
-  }
-
-  getConfig_2() {
-    // now returns an Observable of Config
-    return this.http.get<Server>(this.configUrl);
-  }
-
-  getConfig_3() {
-    return this.http.get<Server>(this.configUrl)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
-
   getConfigResponse(): Observable<HttpResponse<Server>> {
     return this.http.get<Server>(
       this.configUrl, { observe: 'response' });
@@ -83,11 +67,9 @@ export class ServerListService {
       'Something bad happened; please try again later.');
   }
 
-  makeIntentionalError() {
-    return this.http.get('not/a/real/url')
-      .pipe(
-        catchError(this.handleError)
-      );
+  getServer(idx:string) {
+    console.log(idx);
+    return idx;
   }
 
 }

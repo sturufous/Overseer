@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Server, ServerListService } from '../serverlist/serverlist.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-serverdetails',
@@ -11,69 +12,34 @@ import { Server, ServerListService } from '../serverlist/serverlist.service';
 export class ServerDetailsComponent {
   error: any;
   headers: string[];
-  config: Server;
-  configs: Server[] = [];
+  server: Server;
   interval: any;
   threadImage: string;
   connectionImage: string;
 
-  constructor(private configService: ServerListService) {}
+  constructor(private serverListService: ServerListService, private route: ActivatedRoute) {}
 
   displayDuration(idx:number) {
-    this.configService.getConfig(idx)
+    this.serverListService.getConfig(idx)
       .subscribe(
-        (data: Server) => this.configs[idx] = { ...data }, // success path
+        (data: Server) => this.server = { ...data }, // success path
         error => this.error = error // error path
       );
   }
 
   clear() {
-    this.configs = undefined;
+    this.server = undefined;
     this.error = undefined;
     this.headers = undefined;
   }
 
-  showConfig() {
-    this.configService.getConfig(0)
-      .subscribe(
-        (data: Server) => this.config = { ...data }, // success path
-        error => this.error = error // error path
-      );
-  }
-
-  showConfig_v2() {
-    this.configService.getConfig(0)
-      // clone the data object, using its known Config shape
-      .subscribe((data: Server) => this.config = { ...data });
-  }
-
-  showConfigResponse() {
-    this.configService.getConfigResponse()
-      // resp is of type `HttpResponse<Config>`
-      .subscribe(resp => {
-        // display its headers
-        const keys = resp.headers.keys();
-        this.headers = keys.map(key =>
-          `${key}: ${resp.headers.get(key)}`);
-
-      });
-  }
-  makeError() {
-    this.configService.makeIntentionalError().subscribe(null, error => this.error = error );
-  }
-
   ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+	
     this.interval = setInterval(() => {
-      this.displayDuration(0); // api call
-    }, 3000);
-
-    this.interval = setInterval(() => {
-      this.displayDuration(1); // api call
-    }, 3000);
-
-    this.interval = setInterval(() => {
-      this.displayDuration(2); // api call
-    }, 3000);
+        this.displayDuration(+params.get('id')); // api call - + converts string to number
+        }, 3000);
+    })   
   }
 
   threadImageFile(server:Server) {
