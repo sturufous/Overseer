@@ -83,7 +83,7 @@
     border-radius: 4px;
     border: 1px solid #ddd;
     background-color: #fafafa;
-    height: 100px;
+    height: 240px;
     width: 650px;
     margin: 0 8px 16px;
     padding: 16px;
@@ -93,6 +93,7 @@
     align-items: center;
     transition: all 0.2s ease-in-out;
     line-height: 24px;
+    margin-top: 40px;
   }
 
   .card-container .card:not(:last-child) {
@@ -291,30 +292,37 @@
 
 <!-- Resources -->
 <div class="content">
-    <h2>Jorel2 Servers</h2>
-    <p>Servers configured in this Overseer build:</p>
-
-    <div class="card-container">
-        <table style="width: 100%">
-          <tr>
-              <td rowspan="3" style="width: 100px">
-              <img src="assets/{{ connectionImageFile(server) }}" width="70" height="70" style="padding-left: 20px; padding-right: 20px">
-              </td>
-              <td rowspan="3" style="width: 200px">
-              <h2>{{ server.instanceName }}</h2>
-              {{ server.eventTypesHandled }}
-              </td>
-              <td>DB Profile: </td><td>{{ server.dbProfileName }}</td>
-              <td rowspan="3">
-              <img src="assets/{{ threadImageFile(server) }}" width="31" height="70" style="padding-left: 20px">
-              </td>
-          </tr>
-          <tr>
-              <td>Thread&nbsp;Count: </td><td>{{ server.threadsCompleted }}</td>
-          </tr>
-          <tr>
-              <td>Build Number: </td><td>{{ server.buildNumber }}</td>
-          </tr>
-        </table>
+    <div class="card">
+      <table style="width: 100%">
+        <tr>
+            <td rowspan="3" style="width: 100px">
+            <img src="assets/{{ connectionImageFile(server) }}" width="70" height="70" style="padding-left: 20px; padding-right: 20px">
+            </td>
+            <td rowspan="3" style="width: 200px">
+            <h2>{{ server.instanceName }}</h2>
+            {{ server.eventTypesHandled }}
+            </td>
+            <td>DB Profile: </td><td>{{ server.dbProfileName }}</td>
+            <td rowspan="3">
+            <img src="assets/{{ threadImageFile(server) }}" width="31" height="70" style="padding-left: 20px">
+            </td>
+        </tr>
+        <tr>
+            <td>Thread&nbsp;Count: </td><td>{{ server.threadsCompleted }}</td>
+        </tr>
+        <tr>
+            <td>Build Number: </td><td>{{ server.buildNumber }}</td>
+        </tr>
+        <tr><td colspan="5" style="padding-top: 20px; padding-bottom: 20px"><hr style="width: 100%"></td></tr>
+        <tr>
+          <td>Start time:</td><td colspan="2">{{ server.startTime }}</td><td>Min Thread Duration:</td><td>{{ server.minDuration }} secs</td>
+        </tr>
+        <tr>
+          <td>Run time:</td><td colspan="2">{{ server.instanceRunTime }}</td><td>Max Thread Duration:</td><td>{{ server.maxDuration }} secs</td>
+        </tr>
+        <tr>
+          <td>Server details:</td><td colspan="2">{{ server.serverDetails }}</td><td>User:</td><td>{{ server.serverUser }}</td>
+        </tr>
+      </table>
     </div>
 </div>

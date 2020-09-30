@@ -14,7 +14,7 @@ export interface Server {
   status: string;
   dbProfileName: string;
   instanceName: string;
-  runTime: string;
+  instanceRunTime: string;
   startTime: string;
   threadsCompleted: number;
   maxDuration: number;
@@ -24,6 +24,7 @@ export interface Server {
   serverDetails: string;
   connectionStatus: string;
   eventTypesHandled: string;
+  serverUser: string;
 }
 
 @Injectable()
@@ -31,9 +32,9 @@ export class ServerListService {
   configUrl = 'http://localhost:8080/lastduration?host=142.36.95.20&port=1089';
 
   configUrls: string[] = [
-    'http://localhost:8080/lastduration?host=142.36.15.205&port=1089',
+    //'http://localhost:8080/lastduration?host=142.36.15.205&port=1089',
     'http://localhost:8080/lastduration?host=142.36.95.20&port=1089',
-    'http://localhost:8080/lastduration?host=142.36.15.53&port=1089'
+    //'http://localhost:8080/lastduration?host=142.36.15.53&port=1089'
     ]
 
   constructor(private http: HttpClient, private route: ActivatedRoute) { }

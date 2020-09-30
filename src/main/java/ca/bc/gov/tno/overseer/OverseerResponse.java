@@ -20,6 +20,7 @@ public class OverseerResponse {
 	String buildNumber = "Uninitialized";
 	String serverDetails = "Uninitialized";
 	String eventTypesHandled = "Uninitialized";
+	String serverUser = "Unitialized";
 	
 	public Long getDuration() {
 		return duration;
@@ -147,5 +148,13 @@ public class OverseerResponse {
 	           
 	public void setEventTypesHandled(String eventTypesHandled) {
 		this.eventTypesHandled = eventTypesHandled;
+	} 
+	
+	public String getServerUser() {
+		return serverUser;
+	}
+	           
+	public void setServerUser(String serverUser) {
+		this.serverUser = serverUser;
 	} 
 }

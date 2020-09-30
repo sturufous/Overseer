@@ -52,7 +52,7 @@ public class HelloController {
 	 		
 	 		String[] attributes = {"LastDuration", "AppConnectionStatusStr", "AppDatabaseProfileName", "AppInstanceName", "AppInstanceRunTime",
 	 				"AppStartTime", "ThreadCompleteCount", "ThreadMaxDurationSeconds", "ThreadMinDurationSeconds","BuildNumber", "ActiveThreads", 
-	 				"ServerDetails", "EventTypesHandled"};
+	 				"ServerDetails", "EventTypesHandled", "ServerUser"};
 	 			    
 	 		AttributeList attrs = mbsc.getAttributes(objName, attributes);
 	 		
@@ -71,6 +71,7 @@ public class HelloController {
 	 		response.setActiveThreads((int) ((Attribute) attrs.get(10)).getValue());
 	 		response.setServerDetails((String) ((Attribute) attrs.get(11)).getValue());
 	 		response.setEventTypesHandled((String) ((Attribute) attrs.get(12)).getValue());
+	 		response.setServerUser((String) ((Attribute) attrs.get(13)).getValue());
 	 		
 	 	    output = new ResponseEntity<OverseerResponse>(response, responseHeaders, HttpStatus.CREATED);
 	
