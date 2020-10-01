@@ -1,6 +1,17 @@
 import { Component } from '@angular/core';
 import { Server, ServerListService } from '../serverlist/serverlist.service';
 import { ActivatedRoute } from '@angular/router';
+import * as Highcharts from 'highcharts';
+
+declare var require: any;
+let Boost = require('highcharts/modules/boost');
+let noData = require('highcharts/modules/no-data-to-display');
+let More = require('highcharts/highcharts-more');
+
+Boost(Highcharts);
+noData(Highcharts);
+More(Highcharts);
+noData(Highcharts);
 
 @Component({
   selector: 'app-serverdetails',
@@ -16,6 +27,38 @@ export class ServerDetailsComponent {
   interval: any;
   threadImage: string;
   connectionImage: string;
+  dataPoint: any;
+  chart: any;
+
+  public options1:any = {
+        
+    chart: {
+        type: 'spline',
+        events: {
+        }
+    },
+    title: {
+        text: 'Jorel2 Test Server - Last Thread Duration'
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: {
+        title: {
+        text: 'Thread Duration (seconds)'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    exporting: {
+        enabled: false
+    },
+    series: [{
+        name: 'Thread Duration (seconds)',
+        data: []
+    }]
+};
 
   constructor(private serverListService: ServerListService, private route: ActivatedRoute) {}
 
@@ -34,10 +77,14 @@ export class ServerDetailsComponent {
   }
 
   ngOnInit() {
+    this.chart = Highcharts.chart('container', this.options1);
     this.route.paramMap.subscribe(params => {
 	
     this.interval = setInterval(() => {
         this.displayDuration(+params.get('id')); // api call - + converts string to number
+        this.dataPoint = { x: this.server.timestamp, y: Number(this.server.duration) };
+        //debugger;
+        this.chart.series[0].addPoint(this.dataPoint);
         }, 3000);
     })   
   }
