@@ -91,7 +91,8 @@ public class OverseerController {
 	 	    ObjectName objName = new ObjectName("Jorel2Instance:name=jorel2Mbean");
 	 		
 	 		String[] attributes = {"StorageArchiveTo", "StorageAvHost", "StorageBinaryRoot", "StorageCaptureDir", "StorageFtpRoot", 
-	 				"StorageImportFileHours", "StorageMaxCdSize", "StorageProcessedLoc", "StorageWwwRoot"};
+	 				"StorageImportFileHours", "StorageMaxCdSize", "StorageProcessedLoc", "StorageWwwRoot", "FtpHostName", "FtpSecure",
+	 				"FtpType", "FtpUserName"};
 	 			    
 	 		AttributeList attrs = mbsc.getAttributes(objName, attributes);
 	 		
@@ -106,8 +107,47 @@ public class OverseerController {
 	 		response.setMaxCdSize((String) ((Attribute) attrs.get(6)).getValue());
 	 		response.setProcessedLoc((String) ((Attribute) attrs.get(7)).getValue());
 	 		response.setWwwRoot((String) ((Attribute) attrs.get(8)).getValue());
+	 		response.setFtpHost((String) ((Attribute) attrs.get(9)).getValue());
+	 		response.setFtpSecure((String) ((Attribute) attrs.get(10)).getValue());
+	 		response.setFtpType((String) ((Attribute) attrs.get(11)).getValue());
+	 		response.setFtpUser((String) ((Attribute) attrs.get(12)).getValue());
 	 		
 	 	    output = new ResponseEntity<StorageResponse>(response, responseHeaders, HttpStatus.CREATED);
+	
+	    } catch (Exception e) {
+	    	System.out.println(e);
+	    }
+		
+		return output;
+	}
+	
+	@CrossOrigin(origins = {"*"})
+    @RequestMapping(value = "/mail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<MailResponse> mail(@RequestParam String host, @RequestParam String port) {
+		
+		ResponseEntity<MailResponse> output = null; 
+		MBeanServerConnection mbsc = null;
+		
+	    try {
+	 	    HttpHeaders responseHeaders = new HttpHeaders();
+	 	    responseHeaders.set("Content-Type", "application/json");
+	 	    
+	 	    mbsc = getBeanServerConnection(host, port);
+	 	    
+	 	    ObjectName objName = new ObjectName("Jorel2Instance:name=jorel2Mbean");
+	 		
+	 		String[] attributes = {"MailFromAddress", "MailHostAddress", "MailPortNumber", "MailToAddress"};
+	 			    
+	 		AttributeList attrs = mbsc.getAttributes(objName, attributes);
+	 		
+	 		Attribute duration = (Attribute) attrs.get(0);
+	 		MailResponse response = new MailResponse();
+	 		response.setFromAddress((String) ((Attribute) attrs.get(0)).getValue());
+	 		response.setHostAddress((String) ((Attribute) attrs.get(1)).getValue());
+	 		response.setPortNumber((String) ((Attribute) attrs.get(2)).getValue());
+	 		response.setToAddress((String) ((Attribute) attrs.get(3)).getValue());
+	 		
+	 	    output = new ResponseEntity<MailResponse>(response, responseHeaders, HttpStatus.CREATED);
 	
 	    } catch (Exception e) {
 	    	System.out.println(e);

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { Server, Storage, ServerListService } from '../serverlist/serverlist.service';
+import { Server, Storage, Mail, ServerListService } from '../serverlist/serverlist.service';
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
+import { Title } from '@angular/platform-browser';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -26,6 +27,7 @@ export class ServerDetailsComponent {
   headers: string[];
   server: Server;
   storage: Storage;
+  mail: Mail;
   interval: any;
   threadImage: string;
   connectionImage: string;
@@ -35,6 +37,7 @@ export class ServerDetailsComponent {
   chart2: any;
   hideSd: boolean = true;
   hideSt: boolean = true;
+  hideMl: boolean = true;
   hostId: number;
   public options1:any = {
         
@@ -107,7 +110,11 @@ public options2:any = {
   }]
 };
 
-  constructor(private serverListService: ServerListService, private route: ActivatedRoute) {}
+  constructor(private serverListService: ServerListService, private route: ActivatedRoute, private titleService: Title) {}
+
+  public setTitle( newTitle: string) {
+    this.titleService.setTitle( newTitle );
+  }
 
   displayDuration(idx:number) {
     this.serverListService.getConfig(idx)
@@ -121,6 +128,14 @@ public options2:any = {
     this.serverListService.getStorage(idx)
       .subscribe(
         (data: Storage) => this.storage = { ...data }, // success path
+        error => this.error = error // error path
+      );
+  }
+
+  displayMail(idx:number) {
+    this.serverListService.getMail(idx)
+      .subscribe(
+        (data: Mail) => this.mail = { ...data }, // success path
         error => this.error = error // error path
       );
   }
@@ -208,6 +223,10 @@ public options2:any = {
     }
  }
 
+ ngAfterViewInit() {
+  this.setTitle(this.server.instanceName);
+ }
+
   toggleSd() {
       this.hideSd = !this.hideSd;
   }
@@ -217,6 +236,13 @@ public options2:any = {
       this.displayStorage(this.hostId);
     }
     this.hideSt = !this.hideSt;
+  }
+
+  toggleMl() {
+    if(this.hideMl) {
+      this.displayMail(this.hostId);
+    }
+    this.hideMl = !this.hideMl;
   }
 
 }

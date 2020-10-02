@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ServerListService } from './serverlist/serverlist.service';
-import { BrowserModule } from '@angular/platform-browser';
 import { ServerListComponent } from './serverlist/serverlist.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -16,4 +16,5 @@ export class AppComponent {
   interval: any;
   
   constructor(private serverListService: ServerListService) {}
+
 }

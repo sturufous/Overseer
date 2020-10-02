@@ -11,6 +11,10 @@ public class StorageResponse {
 	String maxCdSize = "Uninitialized";
 	String processedLoc = "Unitialized";
 	String wwwRoot = "Unitialized";
+	String ftpHost = "Unitialized";
+	String ftpSecure = "Unitialized";
+	String ftpType = "Unitialized";
+	String ftpUser = "Unitialized";
 	
 	public String getArchiveTo() {
 		return archiveTo;
@@ -82,6 +86,38 @@ public class StorageResponse {
 	
 	public void setWwwRoot(String value) {
 		this.wwwRoot = value;
+	}
+	
+	public String getFtpHost() {
+		return ftpHost;
+	}
+	
+	public void setFtpHost(String value) {
+		this.ftpHost = value;
+	}
+	
+	public String getFtpSecure() {
+		return ftpSecure;
+	}
+	
+	public void setFtpSecure(String value) {
+		this.ftpSecure = value;
+	}
+	
+	public String getFtpType() {
+		return ftpType;
+	}
+	
+	public void setFtpType(String value) {
+		this.ftpType = value;
+	}
+	
+	public String getFtpUser() {
+		return ftpUser;
+	}
+	
+	public void setFtpUser(String value) {
+		this.ftpUser = value;
 	}
 	
 }

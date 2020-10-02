@@ -37,6 +37,17 @@ export interface Storage {
   maxCdSize: string;
   storageProcessedLoc: string;
   wwwRoot: string;
+  ftpHost: string;
+  ftpSecure: string;
+  ftpType: string;
+  ftpUser: string;
+}
+
+export interface Mail {
+  fromAddress: string;
+  toAddress: string;
+  hostAddress: string;
+  portNumber: string;
 }
 
 @Injectable()
@@ -60,6 +71,14 @@ export class ServerListService {
 
   getStorage(idx:number) {
     return this.http.get<Storage>("http://localhost:8080/storage?" + this.configUrls[idx])
+      .pipe(
+        retry(3), // retry a failed request up to 3 times
+        catchError(this.handleError) // then handle the error
+      );
+  }
+
+  getMail(idx:number) {
+    return this.http.get<Mail>("http://localhost:8080/mail?" + this.configUrls[idx])
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error
