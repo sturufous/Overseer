@@ -83,17 +83,15 @@
     border-radius: 4px;
     border: 1px solid #ddd;
     background-color: #fafafa;
-    height: 240px;
-    width: 650px;
-    margin: 0 8px 16px;
-    padding: 16px;
-    display: flex;
-    flex-direction: row;
+    height: auto;
+    width: 834px;
+    display: block;
     justify-content: center;
     align-items: center;
     transition: all 0.2s ease-in-out;
     line-height: 24px;
-    margin-top: 40px;
+    margin-top: 20px;
+    margin-left: 5px;
   }
 
   .card-container .card:not(:last-child) {
@@ -288,63 +286,91 @@
     }
   }
 
-  @import 'https://code.highcharts.com/css/highcharts.css';
-  .highcharts-background {
-      fill: #977474;
-      }
-      .highcharts-title,
-      .highcharts-axis-title {
+  .highcharts-axis-title {
+      font-family:  Arial, Helvetica, sans-serif;
       fill: #333;
-      }
-      .highcharts-credits,
-      .highcharts-credits:hover {
-      fill: #222;
+      font-weight: bold;
   }
 
-  #container {
-    height:500px;
+  #container1 {
+    padding: 16px;
+    height: 250px;
+    width: 800px;
     margin-left: 22px;
     border-radius: 4px;
     border: 1px solid #ddd;
-    background-color: #e2b6b6;
+    background-color: #fafafa;
   }
-</style>
 
+  #container2 {
+    padding: 16px;
+    height: 250px;
+    width: 800px;
+    margin-left: 22px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #fafafa;
+  }
+
+</style>
+<title>{{ server.instanceName }}</title>
 <!-- Resources -->
 <div class="content">
-    <div class="card">
-      <table style="width: 100%">
+  <h2>Server Details</h2>
+
+  <div class="card">
+      <table style="width: 100%; margin: 16px">
         <tr>
             <td rowspan="3" style="width: 100px">
             <img src="assets/{{ connectionImageFile(server) }}" width="70" height="70" style="padding-left: 20px; padding-right: 20px">
             </td>
-            <td rowspan="3" style="width: 200px">
+            <td rowspan="3" style="width: 350px; padding-right: 30px">
             <h2>{{ server.instanceName }}</h2>
             {{ server.eventTypesHandled }}
             </td>
-            <td>DB Profile: </td><td>{{ server.dbProfileName }}</td>
+            <td><b>DB Profile:</b> </td><td>{{ server.dbProfileName }}</td>
             <td rowspan="3">
             <img src="assets/{{ threadImageFile(server) }}" width="31" height="70" style="padding-left: 20px">
             </td>
         </tr>
         <tr>
-            <td>Thread&nbsp;Count: </td><td>{{ server.threadsCompleted }}</td>
+            <td><b>Thread&nbsp;Count:</b> </td><td>{{ server.threadsCompleted }}</td>
         </tr>
         <tr>
-            <td>Build Number: </td><td>{{ server.buildNumber }}</td>
+            <td><b>Build Number:</b> </td><td>{{ server.buildNumber }}</td>
         </tr>
-        <tr><td colspan="5" style="padding-top: 20px; padding-bottom: 20px"><hr style="width: 100%"></td></tr>
+      </table>
+
+      <div (click) = "toggleSd()" style="background-color:#DDD; padding-left: 12px; font-size: 12pt; margin-bottom: 2px"><b>Server details</b></div>
+
+      <table *ngIf="!hideSd" style="width: 100%; margin: 16px;">
         <tr>
-          <td>Start time:</td><td colspan="2">{{ server.startTime }}</td><td>Min Thread Duration:</td><td>{{ server.minDuration }} secs</td>
+          <td><b>Start time:</b></td><td colspan="2">{{ server.startTime }}</td><td><b>Min Thread Duration:</b></td><td>{{ server.minDuration }} secs</td>
         </tr>
         <tr>
-          <td>Run time:</td><td colspan="2">{{ server.instanceRunTime }}</td><td>Max Thread Duration:</td><td>{{ server.maxDuration }} secs</td>
+          <td><b>Run time:</b></td><td colspan="2">{{ server.instanceRunTime }}</td><td><b>Max Thread Duration:</b></td><td>{{ server.maxDuration }} secs</td>
         </tr>
         <tr>
-          <td>Server details:</td><td colspan="2">{{ server.serverDetails }}</td><td>User:</td><td>{{ server.serverUser }}</td>
+          <td><b>Server Architecture:</b></td><td colspan="2">{{ server.serverDetails }}</td><td><b>User:</b></td><td>{{ server.serverUser }}</td>
+        </tr>
+      </table>
+
+      <div (click) = "toggleSt()" style="background-color:#DDD; padding-left: 12px; font-size: 12pt"><b>Storage details</b></div>
+
+      <table *ngIf="!hideSt" style="width: 100%; margin: 16px;">
+        <tr>
+          <td><b>Archive To:</b></td><td colspan="2">{{ storage.archiveTo }}</td><td><b>Av Host:</b></td><td>{{ storage.avHost }}</td><td><b>Binary Root:</b></td><td>{{ storage.binaryRoot }}</td>
+        </tr>
+        <tr>
+          <td><b>Capture Directory:</b></td><td colspan="2">{{ storage.captureDir }}</td><td><b>Ftp Root:</b></td><td>{{ storage.ftpRoot }}</td><td><b>Import File Hours:</b></td><td>{{ storage.importFileHours }}</td>
+        </tr>
+        <tr>
+          <td><b>Max CD Size:</b></td><td colspan="2">{{ storage.maxCdSize }} Megabytes</td><td><b>Processed Location:</b></td><td>{{ storage.processedLoc }}</td><td><b>WWW Root:</b></td><td>{{ storage.wwwRoot }}</td>
         </tr>
       </table>
     </div>
 </div>
 
-<div id="container"></div>
+<div id="container1" style="margin-top: 15px"></div>
+
+<div id="container2" style="margin-top: 15px"></div>

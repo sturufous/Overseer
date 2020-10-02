@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Server, ServerListService } from '../serverlist/serverlist.service';
+import { Server, Storage, ServerListService } from '../serverlist/serverlist.service';
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
+import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -24,21 +25,31 @@ export class ServerDetailsComponent {
   error: any;
   headers: string[];
   server: Server;
+  storage: Storage;
   interval: any;
   threadImage: string;
   connectionImage: string;
-  dataPoint: any;
-  chart: any;
-
+  dataPoint1: any;
+  dataPoint2: any;
+  chart1: any;
+  chart2: any;
+  hideSd: boolean = true;
+  hideSt: boolean = true;
+  hostId: number;
   public options1:any = {
         
     chart: {
         type: 'spline',
+        backgroundColor: '#fafafa',
         events: {
         }
     },
     title: {
-        text: 'Jorel2 Test Server - Last Thread Duration'
+        text: 'Last Thread Duration',
+        style: {
+          fontFamily: 'Helvetica, Ariel, SansSerif',
+          fontWeight: "bold"
+        }
     },
     xAxis: {
         type: 'datetime',
@@ -60,12 +71,56 @@ export class ServerDetailsComponent {
     }]
 };
 
+public options2:any = {
+        
+  chart: {
+      type: 'spline',
+      backgroundColor: '#fafafa',
+      events: {
+      }
+  },
+  title: {
+      text: 'Active Thread Count',
+      style: {
+        fontFamily: 'Helvetica, Ariel, SansSerif',
+        fontWeight: "bold"
+      }
+  },
+  xAxis: {
+      type: 'datetime',
+  },
+  yAxis: {
+      title: {
+      text: 'Active Thread Count'
+      }
+  },
+  legend: {
+      enabled: false
+  },
+  exporting: {
+      enabled: false
+  },
+  series: [{
+      name: 'Active Thread Count',
+      data: [],
+      color: 'green'
+  }]
+};
+
   constructor(private serverListService: ServerListService, private route: ActivatedRoute) {}
 
   displayDuration(idx:number) {
     this.serverListService.getConfig(idx)
       .subscribe(
         (data: Server) => this.server = { ...data }, // success path
+        error => this.error = error // error path
+      );
+  }
+
+  displayStorage(idx:number) {
+    this.serverListService.getStorage(idx)
+      .subscribe(
+        (data: Storage) => this.storage = { ...data }, // success path
         error => this.error = error // error path
       );
   }
@@ -77,14 +132,36 @@ export class ServerDetailsComponent {
   }
 
   ngOnInit() {
-    this.chart = Highcharts.chart('container', this.options1);
+    this.chart1 = Highcharts.chart('container1', this.options1);
+    this.chart2 = Highcharts.chart('container2', this.options2);
+
+    Highcharts.setOptions({
+      time: {
+          useUTC: false
+      }});
+
     this.route.paramMap.subscribe(params => {
-	
+  
+    this.hostId = +params.get('id');
+
     this.interval = setInterval(() => {
         this.displayDuration(+params.get('id')); // api call - + converts string to number
-        this.dataPoint = { x: this.server.timestamp, y: Number(this.server.duration) };
+        this.dataPoint1 = { x: this.server.timestamp, y: Number(this.server.duration) };
+        this.dataPoint2 = { x: this.server.timestamp, y: Number(this.server.activeThreads) };
+
+        var series = this.chart1.series[0];
+        if (series.data.length > 1000) {
+            series.data[0].remove(false, false)
+        }
+
+        var series = this.chart2.series[0];
+        if (series.data.length > 1000) {
+            series.data[0].remove(false, false)
+        }
+
         //debugger;
-        this.chart.series[0].addPoint(this.dataPoint);
+        this.chart1.series[0].addPoint(this.dataPoint1);
+        this.chart2.series[0].addPoint(this.dataPoint2);
         }, 3000);
     })   
   }
@@ -130,5 +207,16 @@ export class ServerDetailsComponent {
       clearInterval(this.interval);
     }
  }
+
+  toggleSd() {
+      this.hideSd = !this.hideSd;
+  }
+
+  toggleSt() {
+    if(this.hideSt) {
+      this.displayStorage(this.hostId);
+    }
+    this.hideSt = !this.hideSt;
+  }
 
 }

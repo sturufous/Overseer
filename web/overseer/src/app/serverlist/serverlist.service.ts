@@ -27,29 +27,43 @@ export interface Server {
   serverUser: string;
 }
 
+export interface Storage {
+  archiveTo: string;
+  avHost: string;
+  binaryRoot: string;
+  captureDir: string;
+  ftpRoot: string;
+  importFileHours: string;
+  maxCdSize: string;
+  storageProcessedLoc: string;
+  wwwRoot: string;
+}
+
 @Injectable()
 export class ServerListService {
-  configUrl = 'http://localhost:8080/lastduration?host=142.36.95.20&port=1089';
-
   configUrls: string[] = [
-    //'http://localhost:8080/lastduration?host=142.36.15.205&port=1089',
-    'http://localhost:8080/lastduration?host=142.36.95.20&port=1089',
-    //'http://localhost:8080/lastduration?host=142.36.15.53&port=1089'
+    'host=142.36.15.205&port=1089',
+    'host=142.36.95.20&port=1089',
+    'host=142.36.15.53&port=1089',
+    'host=142.36.15.138&port=1089'
     ]
 
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
   getConfig(idx:number) {
-    return this.http.get<Server>(this.configUrls[idx])
+    return this.http.get<Server>("http://localhost:8080/lastduration?" + this.configUrls[idx])
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error
       );
   }
 
-  getConfigResponse(): Observable<HttpResponse<Server>> {
-    return this.http.get<Server>(
-      this.configUrl, { observe: 'response' });
+  getStorage(idx:number) {
+    return this.http.get<Storage>("http://localhost:8080/storage?" + this.configUrls[idx])
+      .pipe(
+        retry(3), // retry a failed request up to 3 times
+        catchError(this.handleError) // then handle the error
+      );
   }
 
   private handleError(error: HttpErrorResponse) {

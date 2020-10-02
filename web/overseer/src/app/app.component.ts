@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Server, ServerListService } from './serverlist/serverlist.service';
+import { ServerListService } from './serverlist/serverlist.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { ServerListComponent } from './serverlist/serverlist.component';
 
@@ -11,7 +11,7 @@ import { ServerListComponent } from './serverlist/serverlist.component';
 })
 
 export class AppComponent {
-  title = 'Overseer';
+  title = 'Overseer test';
   error: any;
   interval: any;
   

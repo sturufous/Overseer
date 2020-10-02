@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Server, ServerListService } from './serverlist.service';
+import { Server, Storage, ServerListService } from './serverlist.service';
 
 @Component({
   selector: 'app-config',
@@ -44,6 +44,10 @@ export class ServerListComponent {
 
     this.interval = setInterval(() => {
       this.displayDuration(2); // api call
+    }, 3000);
+
+    this.interval = setInterval(() => {
+      this.displayDuration(3); // api call
     }, 3000);
   }
 

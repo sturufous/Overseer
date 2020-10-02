@@ -1,5 +1,7 @@
 package ca.bc.gov.tno.overseer;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,31 +24,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HelloController {
+public class OverseerController {
 	 
 	Map<String, MBeanServerConnection> mbeanConnections = new ConcurrentHashMap<>();
 	
 	@CrossOrigin(origins = {"*"})
     @RequestMapping(value = "/lastduration", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<OverseerResponse> hello(@RequestParam String host, @RequestParam String port) {
+    ResponseEntity<PollingResponse> polling(@RequestParam String host, @RequestParam String port) {
 		
-		ResponseEntity<OverseerResponse> output = null; 
-		JMXServiceURL url = null;
-		JMXConnector connection = null;
+		ResponseEntity<PollingResponse> output = null; 
 		MBeanServerConnection mbsc = null;
 		
 	    try {
 	 	    HttpHeaders responseHeaders = new HttpHeaders();
 	 	    responseHeaders.set("Content-Type", "application/json");
 	 	    
-	 	    if(!mbeanConnections.containsKey(host)) {
-		 		url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/jmxrmi");
-		 		connection = JMXConnectorFactory.connect(url);
-		 		mbsc = connection.getMBeanServerConnection();
-		 		mbeanConnections.put(host, mbsc);
-	 	    } else {
-	 	    	mbsc = mbeanConnections.get(host);
-	 	    }
+	 	    mbsc = getBeanServerConnection(host, port);
 	 	    
 	 	    ObjectName objName = new ObjectName("Jorel2Instance:name=jorel2Mbean");
 	 		
@@ -57,7 +50,7 @@ public class HelloController {
 	 		AttributeList attrs = mbsc.getAttributes(objName, attributes);
 	 		
 	 		Attribute duration = (Attribute) attrs.get(0);
-	 		OverseerResponse response = new OverseerResponse();
+	 		PollingResponse response = new PollingResponse();
 	 		response.setDuration((Long) ((Attribute) attrs.get(0)).getValue());
 	 		response.setConnectionStatus((String) ((Attribute) attrs.get(1)).getValue());
 	 		response.setDbProfileName((String) ((Attribute) attrs.get(2)).getValue());
@@ -73,12 +66,71 @@ public class HelloController {
 	 		response.setEventTypesHandled((String) ((Attribute) attrs.get(12)).getValue());
 	 		response.setServerUser((String) ((Attribute) attrs.get(13)).getValue());
 	 		
-	 	    output = new ResponseEntity<OverseerResponse>(response, responseHeaders, HttpStatus.CREATED);
+	 	    output = new ResponseEntity<PollingResponse>(response, responseHeaders, HttpStatus.CREATED);
 	
 	    } catch (Exception e) {
 	    	System.out.println(e);
 	    }
 		
 		return output;
+	}
+	
+	@CrossOrigin(origins = {"*"})
+    @RequestMapping(value = "/storage", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<StorageResponse> storage(@RequestParam String host, @RequestParam String port) {
+		
+		ResponseEntity<StorageResponse> output = null; 
+		MBeanServerConnection mbsc = null;
+		
+	    try {
+	 	    HttpHeaders responseHeaders = new HttpHeaders();
+	 	    responseHeaders.set("Content-Type", "application/json");
+	 	    
+	 	    mbsc = getBeanServerConnection(host, port);
+	 	    
+	 	    ObjectName objName = new ObjectName("Jorel2Instance:name=jorel2Mbean");
+	 		
+	 		String[] attributes = {"StorageArchiveTo", "StorageAvHost", "StorageBinaryRoot", "StorageCaptureDir", "StorageFtpRoot", 
+	 				"StorageImportFileHours", "StorageMaxCdSize", "StorageProcessedLoc", "StorageWwwRoot"};
+	 			    
+	 		AttributeList attrs = mbsc.getAttributes(objName, attributes);
+	 		
+	 		Attribute duration = (Attribute) attrs.get(0);
+	 		StorageResponse response = new StorageResponse();
+	 		response.setArchiveTo((String) ((Attribute) attrs.get(0)).getValue());
+	 		response.setAvHost((String) ((Attribute) attrs.get(1)).getValue());
+	 		response.setBinaryRoot((String) ((Attribute) attrs.get(2)).getValue());
+	 		response.setCaptureDir((String) ((Attribute) attrs.get(3)).getValue());
+	 		response.setFtpRoot((String) ((Attribute) attrs.get(4)).getValue());
+	 		response.setImportFileHours((String) ((Attribute) attrs.get(5)).getValue());
+	 		response.setMaxCdSize((String) ((Attribute) attrs.get(6)).getValue());
+	 		response.setProcessedLoc((String) ((Attribute) attrs.get(7)).getValue());
+	 		response.setWwwRoot((String) ((Attribute) attrs.get(8)).getValue());
+	 		
+	 	    output = new ResponseEntity<StorageResponse>(response, responseHeaders, HttpStatus.CREATED);
+	
+	    } catch (Exception e) {
+	    	System.out.println(e);
+	    }
+		
+		return output;
+	}
+	
+	private MBeanServerConnection getBeanServerConnection(String host, String port) throws IOException {
+		
+		MBeanServerConnection mbsc = null;
+		JMXServiceURL url = null;
+		JMXConnector connection = null;
+		
+ 	    if(!mbeanConnections.containsKey(host)) {
+	 		url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/jmxrmi");
+	 		connection = JMXConnectorFactory.connect(url);
+	 		mbsc = connection.getMBeanServerConnection();
+	 		mbeanConnections.put(host, mbsc);
+ 	    } else {
+ 	    	mbsc = mbeanConnections.get(host);
+ 	    }
+ 	    
+ 	    return mbsc;
 	}
 }

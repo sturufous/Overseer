@@ -2,7 +2,7 @@ package ca.bc.gov.tno.overseer;
 
 import java.util.Date;
 
-public class OverseerResponse {
+public class PollingResponse {
 	
 	Long duration = 0L;
 	Long timestamp = new Date().getTime();
