@@ -1,11 +1,9 @@
 package ca.bc.gov.tno.overseer;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
@@ -42,7 +40,7 @@ public class OverseerController {
     ResponseEntity<List<Jorel2HostsDto>> hosts() {
     	SessionFactory sessionFactory = config.getSessionFactory();
     	Session session = sessionFactory.openSession();
-    	List<Jorel2HostsDto> hostList = new ArrayList();
+    	List<Jorel2HostsDto> hostList = new ArrayList<>();
 		ResponseEntity<List<Jorel2HostsDto>> output = null; 
  	    HttpHeaders responseHeaders = new HttpHeaders();
  	    
@@ -52,8 +50,7 @@ public class OverseerController {
     	
     	for(Jorel2HostsDao hostDao : results) {
     		Jorel2HostsDto hostDto = new Jorel2HostsDto();
-    		hostDto.setHostIp(hostDao.getHostIp());
-    		hostDto.setPort(hostDao.getPort());
+    		hostDto.setHostUrl("host=" + hostDao.getHostIp() + "&port=" + hostDao.getPort());
     		hostList.add(hostDto);
     	}
     	

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Server, Storage, ServerListService } from './serverlist.service';
+import { Server, Storage, ServerListService } from '../app.service';
 
 @Component({
   selector: 'app-config',
@@ -34,24 +34,31 @@ export class ServerListComponent {
   }
 
   ngOnInit() {
-
-    debugger;
-    this.serverListService.getHosts();
+  
+    this.serverListService.loadHosts();
 
     this.interval = setInterval(() => {
-      this.displayDuration(0); // api call
+      if(this.serverListService.configUrls.length > 0) {
+        this.displayDuration(0); // api call
+      }
     }, 3000);
 
     this.interval = setInterval(() => {
-      this.displayDuration(1); // api call
+      if(this.serverListService.configUrls.length > 1) {
+        this.displayDuration(1); // api call
+      }
     }, 3000);
 
     this.interval = setInterval(() => {
-      this.displayDuration(2); // api call
+      if(this.serverListService.configUrls.length > 2) {
+        this.displayDuration(2); // api call
+      }
     }, 3000);
 
     this.interval = setInterval(() => {
-      this.displayDuration(3); // api call
+      if(this.serverListService.configUrls.length > 3) {
+        this.displayDuration(3); // api call
+      }
     }, 3000);
   }
 

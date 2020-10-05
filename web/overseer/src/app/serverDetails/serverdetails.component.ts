@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Server, Storage, Mail, ServerListService } from '../serverlist/serverlist.service';
+import { Server, Storage, Mail, ServerListService } from '../app.service';
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
@@ -147,6 +147,8 @@ public options2:any = {
   }
 
   ngOnInit() {
+    this.serverListService.loadHosts();
+
     this.chart1 = Highcharts.chart('container1', this.options1);
     this.chart2 = Highcharts.chart('container2', this.options2);
 
@@ -174,7 +176,6 @@ public options2:any = {
             series.data[0].remove(false, false)
         }
 
-        //debugger;
         this.chart1.series[0].addPoint(this.dataPoint1);
         this.chart2.series[0].addPoint(this.dataPoint2);
         }, 3000);

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ServerListService } from './serverlist/serverlist.service';
+import { ServerListService } from './app.service';
 import { ServerListComponent } from './serverlist/serverlist.component';
 import { Title } from '@angular/platform-browser';
 

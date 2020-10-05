@@ -43,11 +43,6 @@ export interface Storage {
   ftpUser: string;
 }
 
-export interface Host {
-  hostIp: string;
-  port: string;
-}
-
 export interface Mail {
   fromAddress: string;
   toAddress: string;
@@ -55,29 +50,43 @@ export interface Mail {
   portNumber: string;
 }
 
-@Injectable()
+export interface HostUrl {
+  hostUrl: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class ServerListService {
-  configUrls: string[] = [
-    'host=142.36.15.205&port=1089',
-    'host=142.36.95.20&port=1089',
-    'host=142.36.15.53&port=1089',
-    'host=142.36.15.138&port=1089'
-    ]
+  configUrls: HostUrl[] = []; //[
+    //'host=142.36.15.205&port=1089',
+    //'host=142.36.95.20&port=1089',
+    //'host=142.36.15.53&port=1089',
+    //'host=142.36.15.138&port=1089'
+    //]
+
+  error: string;
 
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
+  loadHosts() {
+    this.getHosts()
+      .subscribe(
+        (data: any) => this.configUrls.push(...data), // success path
+        error => this.error = error // error path
+      );
+  }
+
   getHosts() {
-    debugger;
-    var hostList = fetch('http://localhost:8080/hosts').then(function(response) {
-            return response.json()
-            }).then(function(data) {
-              debugger;
-                var a = data;
-            })
+    return this.http.get("http://localhost:8080/hosts")
+      .pipe(
+        retry(3), // retry a failed request up to 3 times
+        catchError(this.handleError) // then handle the error
+      );
   }
 
   getConfig(idx:number) {
-    return this.http.get<Server>("http://localhost:8080/lastduration?" + this.configUrls[idx])
+    return this.http.get<Server>("http://localhost:8080/lastduration?" + this.configUrls[idx].hostUrl)
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error
@@ -85,7 +94,7 @@ export class ServerListService {
   }
 
   getStorage(idx:number) {
-    return this.http.get<Storage>("http://localhost:8080/storage?" + this.configUrls[idx])
+    return this.http.get<Storage>("http://localhost:8080/storage?" + this.configUrls[idx].hostUrl)
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error
@@ -93,7 +102,7 @@ export class ServerListService {
   }
 
   getMail(idx:number) {
-    return this.http.get<Mail>("http://localhost:8080/mail?" + this.configUrls[idx])
+    return this.http.get<Mail>("http://localhost:8080/mail?" + this.configUrls[idx].hostUrl)
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error

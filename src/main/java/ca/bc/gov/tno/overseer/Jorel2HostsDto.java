@@ -2,22 +2,13 @@ package ca.bc.gov.tno.overseer;
 
 public class Jorel2HostsDto {
 	
-	String hostIp = "Uninitialized";
-	String port = "Uninitialized";
+	String hostUrl = "Uninitialized";
 
-	public String getHostIp() {
-		return this.hostIp;
+	public String getHostUrl() {
+		return this.hostUrl;
 	}
 	
-	public void setHostIp(String hostIp) {
-		this.hostIp = hostIp;
-	}
-	
-	public String getPort() {
-		return this.port;
-	}
-	
-	public void setPort(String port) {
-		this.port = port;
+	public void setHostUrl(String hostUrl) {
+		this.hostUrl = hostUrl;
 	}
 }

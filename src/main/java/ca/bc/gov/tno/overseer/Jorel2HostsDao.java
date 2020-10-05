@@ -23,6 +23,7 @@ public class Jorel2HostsDao implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private String hostIp;
 	private String port;
+	private String description;
 
 	public Jorel2HostsDao() {
 	}
@@ -54,6 +55,15 @@ public class Jorel2HostsDao implements java.io.Serializable {
 
 	public void setPort(String port) {
 		this.port = port;
+	}
+
+	@Column(name = "DESCRIPTION", length = 256)
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**
