@@ -34,6 +34,10 @@ export class ServerListComponent {
   }
 
   ngOnInit() {
+
+    debugger;
+    this.serverListService.getHosts();
+
     this.interval = setInterval(() => {
       this.displayDuration(0); // api call
     }, 3000);

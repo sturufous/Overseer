@@ -2,9 +2,13 @@ package ca.bc.gov.tno.overseer;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.inject.Inject;
 import javax.management.Attribute;
 import javax.management.AttributeList;
 import javax.management.MBeanServerConnection;
@@ -13,6 +17,8 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +33,34 @@ import org.springframework.web.bind.annotation.RestController;
 public class OverseerController {
 	 
 	Map<String, MBeanServerConnection> mbeanConnections = new ConcurrentHashMap<>();
+	
+	@Inject
+	DevDataSourceConfig config;
+	
+	@CrossOrigin(origins = {"*"})
+    @RequestMapping(value = "/hosts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<Jorel2HostsDto>> hosts() {
+    	SessionFactory sessionFactory = config.getSessionFactory();
+    	Session session = sessionFactory.openSession();
+    	List<Jorel2HostsDto> hostList = new ArrayList();
+		ResponseEntity<List<Jorel2HostsDto>> output = null; 
+ 	    HttpHeaders responseHeaders = new HttpHeaders();
+ 	    
+ 	    responseHeaders.set("Content-Type", "application/json");
+    	
+    	List<Jorel2HostsDao> results = Jorel2HostsDao.getJorel2Hosts(session);
+    	
+    	for(Jorel2HostsDao hostDao : results) {
+    		Jorel2HostsDto hostDto = new Jorel2HostsDto();
+    		hostDto.setHostIp(hostDao.getHostIp());
+    		hostDto.setPort(hostDao.getPort());
+    		hostList.add(hostDto);
+    	}
+    	
+ 	    output = new ResponseEntity<List<Jorel2HostsDto>>(hostList, responseHeaders, HttpStatus.CREATED);
+
+		return output;
+	}
 	
 	@CrossOrigin(origins = {"*"})
     @RequestMapping(value = "/lastduration", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -43,6 +43,11 @@ export interface Storage {
   ftpUser: string;
 }
 
+export interface Host {
+  hostIp: string;
+  port: string;
+}
+
 export interface Mail {
   fromAddress: string;
   toAddress: string;
@@ -60,6 +65,16 @@ export class ServerListService {
     ]
 
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
+
+  getHosts() {
+    debugger;
+    var hostList = fetch('http://localhost:8080/hosts').then(function(response) {
+            return response.json()
+            }).then(function(data) {
+              debugger;
+                var a = data;
+            })
+  }
 
   getConfig(idx:number) {
     return this.http.get<Server>("http://localhost:8080/lastduration?" + this.configUrls[idx])
