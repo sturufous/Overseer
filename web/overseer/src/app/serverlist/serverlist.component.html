@@ -54,9 +54,11 @@
   .content {
     display: flex;
     padding: 0 16px;
-    max-width: 2000px;
-    flex-direction: column;
+    max-width: 1200px;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
+    margin-left: 50px;
   }
 
   svg.material-icons {
@@ -83,9 +85,9 @@
     border-radius: 4px;
     border: 1px solid #ddd;
     background-color: #fafafa;
-    height: 100px;
-    width: 650px;
-    margin: 0 8px 16px;
+    height: 150px;
+    width: 300px;
+    margin: 0 8px 5px;
     padding: 16px;
     display: flex;
     flex-direction: row;
@@ -290,33 +292,41 @@
 </style>
 
 <!-- Resources -->
+<div class="content" style="flex-direction: column;">
+  <h2>Jorel2 Servers</h2>
+  <p>Servers configured in this Overseer build:</p>
+</div>
 <div class="content">
-    <h2>Jorel2 Servers</h2>
-    <p>Servers configured in this Overseer build:</p>
 
     <div *ngFor="let config of configs; let i = index" class="card-container">
         <a class="card" target="_blank" rel="noopener" href="/serverdetails/{{ i }}">
             
-            <table style="width: 100%">
-            <tr>
-                <td rowspan="3" style="width: 100px">
-                <img src="assets/{{ connectionImageFile(config) }}" width="70" height="70" style="padding-left: 20px; padding-right: 20px">
+            <table style="width: 100%; table-layout: fixed;">
+              <tr>
+                <td colspan="4">
+                  <h2>{{ config.instanceName }}</h2>
                 </td>
-                <td rowspan="3" style="width: 200px">
-                <h2>{{ config.instanceName }}</h2>
-                {{ config.eventTypesHandled }}
+              </tr>
+              <tr>
+                <td colspan="4" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+                  {{ config.eventTypesHandled }}
                 </td>
-                <td>DB Profile: </td><td>{{ config.dbProfileName }}</td>
-                <td rowspan="3">
-                <img src="assets/{{ threadImageFile(config) }}" width="31" height="70" style="padding-left: 20px">
-                </td>
-            </tr>
-            <tr>
-                <td>Thread&nbsp;Count: </td><td>{{ config.threadsCompleted }}</td>
-            </tr>
-            <tr>
-                <td>Build Number: </td><td>{{ config.buildNumber }}</td>
-            </tr>
+              </tr>
+              <tr>
+                  <td rowspan="3" style="padding-top: 15px">
+                    <img src="assets/{{ connectionImageFile(config) }}" width="79" height="70">
+                  </td>
+                    <td>DB: </td><td>{{ config.dbProfileName }}</td>
+                  <td rowspan="3">
+                    <img src="assets/{{ threadImageFile(config) }}" width="31" height="70" style="padding-left: 25px">
+                  </td>
+              </tr>
+              <tr>
+                  <td>Threads: </td><td>{{ config.threadsCompleted }}</td>
+              </tr>
+              <tr>
+                  <td>Build: </td><td>{{ config.buildNumber }}</td>
+              </tr>
             </table>
         </a>
     </div>
