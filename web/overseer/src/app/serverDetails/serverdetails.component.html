@@ -322,7 +322,7 @@
       <table style="width: 100%; margin: 16px">
         <tr>
             <td rowspan="3" style="width: 100px">
-            <img src="assets/{{ connectionImageFile(server) }}" width="70" height="70" style="padding-left: 20px; padding-right: 20px">
+            <img src="assets/{{ connectionImageFile(server) }}" width="57" height="70" style="padding-left: 20px; padding-right: 20px">
             </td>
             <td rowspan="3" style="width: 350px; padding-right: 30px">
             <h2>{{ server.instanceName }}</h2>
@@ -341,7 +341,7 @@
         </tr>
       </table>
 
-      <div (click) = "toggleSd()" style="background-color:#DDD; padding-left: 12px; font-size: 12pt; margin-bottom: 2px"><b>Server details</b></div>
+      <div (click) = "toggleSd()" style="background-color:#DDD; padding-left: 12px; font-size: 11pt; margin-bottom: 2px"><b>&plusmn; Server details</b></div>
 
       <table *ngIf="!hideSd" style="width: 100%; margin: 16px;">
         <tr>
@@ -355,7 +355,7 @@
         </tr>
       </table>
 
-      <div (click) = "toggleSt()" style="background-color:#DDD; padding-left: 12px; font-size: 12pt; margin-bottom: 2px"><b>Storage Settings</b></div>
+      <div (click) = "toggleSt()" style="background-color:#DDD; padding-left: 12px; font-size: 11pt; margin-bottom: 2px"><b>&plusmn; Storage Settings</b></div>
 
       <table *ngIf="!hideSt" style="width: 100%; margin: 16px;">
         <tr>
@@ -372,7 +372,7 @@
         </tr>
       </table>
 
-      <div (click) = "toggleMl()" style="background-color:#DDD; padding-left: 12px; font-size: 12pt"><b>Mail Settings</b></div>
+      <div (click) = "toggleMl()" style="background-color:#DDD; padding-left: 12px; font-size: 11pt"><b>&plusmn; Mail Settings</b></div>
 
       <table *ngIf="!hideMl" style="width: 100%; margin: 16px;">
         <tr>

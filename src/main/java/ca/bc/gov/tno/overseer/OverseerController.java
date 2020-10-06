@@ -40,19 +40,19 @@ public class OverseerController {
 	
 	@PostConstruct
 	private void init() {
-		//try {
-			//Runtime rt = Runtime.getRuntime();
-			//String url = "http://localhost:8080/";
-			//rt.exec("rundll32 url.dll,FileProtocolHandler " + url);
+		try {
+			Runtime rt = Runtime.getRuntime();
+			String url = "http://localhost:8080/overseer/serverlist";
+			rt.exec("rundll32 url.dll,FileProtocolHandler " + url);
 			
 			// Mac
 			//Runtime rt = Runtime.getRuntime();
 			//String url = "http://stackoverflow.com";
 			//rt.exec("open " + url);
-		//} catch (IOException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//}
+			e.printStackTrace();
+		}
 	}
 	
 	@CrossOrigin(origins = {"*"})
@@ -116,6 +116,7 @@ public class OverseerController {
 	 		response.setServerDetails((String) ((Attribute) attrs.get(11)).getValue());
 	 		response.setEventTypesHandled((String) ((Attribute) attrs.get(12)).getValue());
 	 		response.setServerUser((String) ((Attribute) attrs.get(13)).getValue());
+	 		response.setJorelHostIp(host);
 	 		
 	 	    output = new ResponseEntity<PollingResponse>(response, responseHeaders, HttpStatus.CREATED);
 	

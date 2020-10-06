@@ -304,7 +304,7 @@
             <table style="width: 100%; table-layout: fixed;">
               <tr>
                 <td colspan="4">
-                  <h2>{{ config.instanceName }}</h2>
+                  <h2>{{ config.instanceName }} <span style="font-size: 11pt; font-weight: bold">({{ config.jorelHostIp }})</span></h2>
                 </td>
               </tr>
               <tr>
@@ -314,18 +314,18 @@
               </tr>
               <tr>
                   <td rowspan="3" style="padding-top: 15px">
-                    <img src="assets/{{ connectionImageFile(config) }}" width="79" height="70" border="1">
+                    <img src="assets/{{ connectionImageFile(config) }}" width="57" height="70">
                   </td>
-                    <td>DB: </td><td>{{ config.dbProfileName }}</td>
+                    <td>&nbsp;&nbsp;DB: </td><td>&nbsp;&nbsp;{{ config.dbProfileName }}</td>
                   <td rowspan="3">
                     <img src="assets/{{ threadImageFile(config) }}" width="31" height="70" style="padding-left: 25px">
                   </td>
               </tr>
               <tr>
-                  <td>Threads: </td><td>{{ config.threadsCompleted }}</td>
+                  <td>&nbsp;&nbsp;Threads: </td><td>&nbsp;&nbsp;{{ config.threadsCompleted }}</td>
               </tr>
               <tr>
-                  <td>Build: </td><td>{{ config.buildNumber }}</td>
+                  <td>&nbsp;&nbsp;Build: </td><td>&nbsp;&nbsp;{{ config.buildNumber }}</td>
               </tr>
             </table>
         </a>

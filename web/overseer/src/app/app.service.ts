@@ -25,6 +25,7 @@ export interface Server {
   connectionStatus: string;
   eventTypesHandled: string;
   serverUser: string;
+  jorelHostIp: string;
 }
 
 export interface Storage {

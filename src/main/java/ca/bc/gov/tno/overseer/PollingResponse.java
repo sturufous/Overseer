@@ -21,6 +21,7 @@ public class PollingResponse {
 	String serverDetails = "Uninitialized";
 	String eventTypesHandled = "Uninitialized";
 	String serverUser = "Unitialized";
+	String jorelHostIp = "Uninitialized";
 	
 	public Long getDuration() {
 		return duration;
@@ -157,4 +158,13 @@ public class PollingResponse {
 	public void setServerUser(String serverUser) {
 		this.serverUser = serverUser;
 	} 
+
+	public String getJorelHostIp() {
+		return jorelHostIp;
+	}
+	
+	public void setJorelHostIp(String value) {
+		this.jorelHostIp = value;
+	}
+	
 }

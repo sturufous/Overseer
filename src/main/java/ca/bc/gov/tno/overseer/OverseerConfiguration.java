@@ -18,6 +18,10 @@ import java.io.IOException;
 @ComponentScan("ca.bc.gov.tno.overseer")
 public class OverseerConfiguration implements WebMvcConfigurer {
 	
+	/**
+	 * Necessary to support deep links from Angular application. Any path beginning with <code>overseer</code> will be 
+	 * re-written to <code>/static/index.html</code>.
+	 */
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/overseer/**")
                 .addResourceLocations("classpath:/static/")
