@@ -8,15 +8,15 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import ca.bc.gov.tno.overseer.OverseerConfiguration;
 
 @SpringBootApplication
-public class App {
+public class Overseer {
     public static void main(String[] args) {
     	
-		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(); 
+		//AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(); 
         //ConfigurableEnvironment env = ctx.getEnvironment(); 
     	//env.setActiveProfiles("dev");
-        ctx.register(OverseerConfiguration.class);
-        ctx.refresh();
+        //ctx.register(OverseerConfiguration.class);
+        //ctx.refresh();
     	
-        SpringApplication.run(App.class, args);
+        SpringApplication.run(Overseer.class, args);
     }
 }

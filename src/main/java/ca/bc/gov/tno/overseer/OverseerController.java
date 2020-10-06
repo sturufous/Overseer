@@ -1,11 +1,14 @@
 package ca.bc.gov.tno.overseer;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.management.Attribute;
 import javax.management.AttributeList;
@@ -35,8 +38,25 @@ public class OverseerController {
 	@Inject
 	DevDataSourceConfig config;
 	
+	@PostConstruct
+	private void init() {
+		//try {
+			//Runtime rt = Runtime.getRuntime();
+			//String url = "http://localhost:8080/";
+			//rt.exec("rundll32 url.dll,FileProtocolHandler " + url);
+			
+			// Mac
+			//Runtime rt = Runtime.getRuntime();
+			//String url = "http://stackoverflow.com";
+			//rt.exec("open " + url);
+		//} catch (IOException e) {
+			// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
+	}
+	
 	@CrossOrigin(origins = {"*"})
-    @RequestMapping(value = "/hosts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api/hosts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<Jorel2HostsDto>> hosts() {
     	SessionFactory sessionFactory = config.getSessionFactory();
     	Session session = sessionFactory.openSession();
@@ -60,7 +80,7 @@ public class OverseerController {
 	}
 	
 	@CrossOrigin(origins = {"*"})
-    @RequestMapping(value = "/lastduration", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api/lastduration", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PollingResponse> polling(@RequestParam String host, @RequestParam String port) {
 		
 		ResponseEntity<PollingResponse> output = null; 
@@ -107,7 +127,7 @@ public class OverseerController {
 	}
 	
 	@CrossOrigin(origins = {"*"})
-    @RequestMapping(value = "/storage", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api/storage", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<StorageResponse> storage(@RequestParam String host, @RequestParam String port) {
 		
 		ResponseEntity<StorageResponse> output = null; 
@@ -153,7 +173,7 @@ public class OverseerController {
 	}
 	
 	@CrossOrigin(origins = {"*"})
-    @RequestMapping(value = "/mail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api/mail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<MailResponse> mail(@RequestParam String host, @RequestParam String port) {
 		
 		ResponseEntity<MailResponse> output = null; 
@@ -187,20 +207,25 @@ public class OverseerController {
 		return output;
 	}
 	
-	private MBeanServerConnection getBeanServerConnection(String host, String port) throws IOException {
+	private MBeanServerConnection getBeanServerConnection(String host, String port) {
 		
 		MBeanServerConnection mbsc = null;
 		JMXServiceURL url = null;
 		JMXConnector connection = null;
 		
- 	    if(!mbeanConnections.containsKey(host)) {
-	 		url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/jmxrmi");
-	 		connection = JMXConnectorFactory.connect(url);
-	 		mbsc = connection.getMBeanServerConnection();
-	 		mbeanConnections.put(host, mbsc);
- 	    } else {
- 	    	mbsc = mbeanConnections.get(host);
- 	    }
+		try {
+	 	    if(!mbeanConnections.containsKey(host)) {
+		 		url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/jmxrmi");
+		 		connection = JMXConnectorFactory.connect(url);
+		 		mbsc = connection.getMBeanServerConnection();
+		 		mbeanConnections.put(host, mbsc);
+	 	    } else {
+	 	    	mbsc = mbeanConnections.get(host);
+	 	    }
+		} catch (Exception e) {
+			mbeanConnections.remove(host);
+			System.out.println("Exception getting mbean server: " + e);
+		}
  	    
  	    return mbsc;
 	}

@@ -78,7 +78,7 @@ export class ServerListService {
   }
 
   getHosts() {
-    return this.http.get("http://localhost:8080/hosts")
+    return this.http.get("http://localhost:8080/api/hosts")
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error
@@ -86,7 +86,7 @@ export class ServerListService {
   }
 
   getConfig(idx:number) {
-    return this.http.get<Server>("http://localhost:8080/lastduration?" + this.configUrls[idx].hostUrl)
+    return this.http.get<Server>("http://localhost:8080/api/lastduration?" + this.configUrls[idx].hostUrl)
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error
@@ -94,7 +94,7 @@ export class ServerListService {
   }
 
   getStorage(idx:number) {
-    return this.http.get<Storage>("http://localhost:8080/storage?" + this.configUrls[idx].hostUrl)
+    return this.http.get<Storage>("http://localhost:8080/api/storage?" + this.configUrls[idx].hostUrl)
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error
@@ -102,7 +102,7 @@ export class ServerListService {
   }
 
   getMail(idx:number) {
-    return this.http.get<Mail>("http://localhost:8080/mail?" + this.configUrls[idx].hostUrl)
+    return this.http.get<Mail>("http://localhost:8080/api/mail?" + this.configUrls[idx].hostUrl)
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error

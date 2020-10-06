@@ -299,7 +299,7 @@
 <div class="content">
 
     <div *ngFor="let config of configs; let i = index" class="card-container">
-        <a class="card" target="_blank" rel="noopener" href="/serverdetails/{{ i }}">
+        <a class="card" target="_blank" rel="noopener" href="/overseer/serverdetails/{{ i }}">
             
             <table style="width: 100%; table-layout: fixed;">
               <tr>
@@ -314,7 +314,7 @@
               </tr>
               <tr>
                   <td rowspan="3" style="padding-top: 15px">
-                    <img src="assets/{{ connectionImageFile(config) }}" width="79" height="70">
+                    <img src="assets/{{ connectionImageFile(config) }}" width="79" height="70" border="1">
                   </td>
                     <td>DB: </td><td>{{ config.dbProfileName }}</td>
                   <td rowspan="3">

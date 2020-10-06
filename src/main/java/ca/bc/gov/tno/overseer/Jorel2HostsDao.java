@@ -24,7 +24,8 @@ public class Jorel2HostsDao implements java.io.Serializable {
 	private String hostIp;
 	private String port;
 	private String description;
-
+	private Boolean active;
+	
 	public Jorel2HostsDao() {
 	}
 
@@ -66,6 +67,15 @@ public class Jorel2HostsDao implements java.io.Serializable {
 		this.description = description;
 	}
 
+	@Column(name = "ACTIVE", precision = 1, scale = 0)
+	public Boolean getActive() {
+		return this.active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	/**
 	 * Get a list of all Jorel2 hosts that can be monitored by Overseer. 
 	 * 
@@ -74,7 +84,7 @@ public class Jorel2HostsDao implements java.io.Serializable {
 	 */
 	public static List<Jorel2HostsDao> getJorel2Hosts(Session session) {
 		
-		String sqlStmt = "from Jorel2HostsDao";
+		String sqlStmt = "from Jorel2HostsDao where active = true";
 
 		Query<Jorel2HostsDao> query = session.createQuery(sqlStmt, Jorel2HostsDao.class);
         List<Jorel2HostsDao> results = query.getResultList();

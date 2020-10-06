@@ -11,7 +11,7 @@ import { Title } from '@angular/platform-browser';
 })
 
 export class AppComponent {
-  title = 'Overseer test';
+  title = 'Overseer';
   error: any;
   interval: any;
   
