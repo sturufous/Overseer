@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Server, Storage, ServerListService } from '../app.service';
+import * as Highcharts from 'highcharts';
 
 @Component({
   selector: 'app-config',
@@ -13,9 +14,49 @@ export class ServerListComponent {
   headers: string[];
   config: Server;
   configs: Server[] = [];
+  hostInitializer: any;
   interval: any;
   threadImage: string;
   connectionImage: string;
+  dataPoint1: any;
+  chart1: any;
+  hostThreads: any[] = [];
+  splineColors: string[] = ["#0072bc","#188d0c","#f7941d", "#ed1c24","#7b35b0", "#f7941d","#d2027d", "#2e3192", "#019fdb", "#a0410d", "9e005d", "#00746b"];
+
+  public options1:any = {
+        
+    chart: {
+        type: 'spline',
+        backgroundColor: '#fafafa',
+        events: {
+        }
+    },
+    title: {
+        text: 'Last Thread Duration',
+        style: {
+          fontFamily: 'Helvetica, Ariel, SansSerif',
+          fontWeight: "bold"
+        }
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: {
+        title: {
+          text: 'Thread Duration (seconds)'
+        }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle'
+   },
+    exporting: {
+        enabled: false
+    },
+    series: []
+};
+
 
   constructor(private serverListService: ServerListService) {}
 
@@ -36,33 +77,42 @@ export class ServerListComponent {
   ngOnInit() {
   
     this.serverListService.loadHosts();
+    
+    this.chart1 = Highcharts.chart('container1', this.options1);
+    
+    Highcharts.setOptions({
+      time: {
+          useUTC: false
+      }});
 
-    this.interval = setInterval(() => {
-      if(this.serverListService.configUrls.length > 0) {
-        this.displayDuration(0); // api call
-      }
-    }, 3000);
+    this.hostInitializer = setInterval(() => {
+        
+        if(this.serverListService.configUrls.length > 0) {
+          for(var idx=0; idx <this.serverListService.configUrls.length; idx++) {
+            this.displayDuration(idx); // api call
+            var series = this.chart1.series;
+            if(series.length == 0) {
+              if(this.configs.length > 0) {
+                for(var idx2=0; idx2 < this.configs.length; idx2++) {
+                  this.chart1.addSeries({name: this.configs[idx2].instanceName, color: this.splineColors[idx2], data: []});
+                }
+              }
+            }
 
-    this.interval = setInterval(() => {
-      if(this.serverListService.configUrls.length > 1) {
-        this.displayDuration(1); // api call
-      }
-    }, 3000);
+            if(this.configs.length > 0) {
+              this.dataPoint1 = { x: this.configs[idx].timestamp, y: Number(this.configs[idx].duration) };
 
-    this.interval = setInterval(() => {
-      if(this.serverListService.configUrls.length > 2) {
-        this.displayDuration(2); // api call
-      }
-    }, 3000);
-
-    this.interval = setInterval(() => {
-      if(this.serverListService.configUrls.length > 3) {
-        this.displayDuration(3); // api call
+              /*if (series.data.length > 1000) {
+                  series.data[idx].remove(false, false)
+              }*/
+              series[idx].addPoint(this.dataPoint1);
+            }
+        }
       }
     }, 3000);
   }
 
-  threadImageFile(server:Server) {
+   threadImageFile(server:Server) {
 
     var image: string;
 

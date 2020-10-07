@@ -76,6 +76,8 @@ export class ServerListService {
         (data: any) => this.configUrls.push(...data), // success path
         error => this.error = error // error path
       );
+
+      //this.getHosts().toPromise().then(x => console.log('Hosts loaded'));
   }
 
   getHosts() {
