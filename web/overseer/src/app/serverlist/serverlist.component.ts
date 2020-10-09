@@ -79,7 +79,7 @@ export class ServerListComponent {
     this.serverListService.loadHosts();
     
     this.chart1 = Highcharts.chart('container1', this.options1);
-    
+
     Highcharts.setOptions({
       time: {
           useUTC: false
@@ -88,13 +88,15 @@ export class ServerListComponent {
     this.hostInitializer = setInterval(() => {
         
         if(this.serverListService.configUrls.length > 0) {
-          for(var idx=0; idx <this.serverListService.configUrls.length; idx++) {
+          for(var idx=0; idx < this.serverListService.configUrls.length; idx++) {
             this.displayDuration(idx); // api call
             var series = this.chart1.series;
             if(series.length == 0) {
               if(this.configs.length > 0) {
                 for(var idx2=0; idx2 < this.configs.length; idx2++) {
-                  this.chart1.addSeries({name: this.configs[idx2].instanceName, color: this.splineColors[idx2], data: []});
+                  if(this.serverListService.configUrls[idx2].graph) {
+                    this.chart1.addSeries({name: this.configs[idx2].instanceName, color: this.splineColors[idx2], data: []});
+                  }
                 }
               }
             }
@@ -102,9 +104,10 @@ export class ServerListComponent {
             if(this.configs.length > 0) {
               this.dataPoint1 = { x: this.configs[idx].timestamp, y: Number(this.configs[idx].duration) };
 
-              /*if (series.data.length > 1000) {
-                  series.data[idx].remove(false, false)
-              }*/
+              if (series[idx].data.length > 1200) {
+                  series[idx].data[0].remove(false, false)
+              }
+
               series[idx].addPoint(this.dataPoint1);
             }
         }
@@ -112,9 +115,14 @@ export class ServerListComponent {
     }, 3000);
   }
 
+  restartServer($event: MouseEvent, config: Server) {
+    $event.preventDefault();
+    confirm("Restart server " + config.instanceName + "?")
+  }
+
    threadImageFile(server:Server) {
 
-    var image: string;
+    var image: string = null;
 
     if (server.activeThreads == "0") {
       image = "0-threads.png";
@@ -130,6 +138,10 @@ export class ServerListComponent {
 
     if (server.activeThreads == "3") {
       image = "3-threads.png";
+    }
+
+    if (image == null) {
+      image = "0-threads.png";
     }
 
     return image;

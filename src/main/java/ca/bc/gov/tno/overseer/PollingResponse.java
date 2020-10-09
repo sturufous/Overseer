@@ -1,6 +1,7 @@
 package ca.bc.gov.tno.overseer;
 
 import java.util.Date;
+import java.util.Map;
 
 public class PollingResponse {
 	
@@ -13,15 +14,16 @@ public class PollingResponse {
 	String instance = "Uninitialized";
 	String runTime = "Uninitialized";
 	String startTime = "Uninitialized";
-	Integer threadsCompleted = -1;
-	Long maxDuration = -1L;
-	Long minDuration = -1L;
-	int activeThreads = -1;
+	Long threadsCompleted = 0L;
+	Long maxDuration = 0L;
+	Long minDuration = 0L;
+	int activeThreads = 0;
 	String buildNumber = "Uninitialized";
 	String serverDetails = "Uninitialized";
 	String eventTypesHandled = "Uninitialized";
 	String serverUser = "Unitialized";
 	String jorelHostIp = "Uninitialized";
+	String[][] databaseInterruptions = null;
 	
 	public Long getDuration() {
 		return duration;
@@ -95,11 +97,11 @@ public class PollingResponse {
 		this.startTime = startTime;
 	}
 
-	public Integer getThreadsCompleted() {
+	public Long getThreadsCompleted() {
 		return threadsCompleted;
 	}
 	           
-	public void setThreadsCompleted(Integer threadsCompleted) {
+	public void setThreadsCompleted(Long threadsCompleted) {
 		this.threadsCompleted = threadsCompleted;
 	}
 
@@ -165,6 +167,14 @@ public class PollingResponse {
 	
 	public void setJorelHostIp(String value) {
 		this.jorelHostIp = value;
+	}
+	
+	public String[][] getDatabaseInterruptions() {
+		return databaseInterruptions;
+	}
+	
+	public void setDatabaseInterruptions(String[][] value) {
+		this.databaseInterruptions = value;
 	}
 	
 }

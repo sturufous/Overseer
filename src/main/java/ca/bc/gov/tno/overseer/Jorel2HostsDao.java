@@ -25,6 +25,7 @@ public class Jorel2HostsDao implements java.io.Serializable {
 	private String port;
 	private String description;
 	private Boolean active;
+	private Boolean graph;
 	
 	public Jorel2HostsDao() {
 	}
@@ -74,6 +75,15 @@ public class Jorel2HostsDao implements java.io.Serializable {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+
+	@Column(name = "GRAPH", precision = 1, scale = 0)
+	public Boolean getGraph() {
+		return this.graph;
+	}
+
+	public void setGraph(Boolean graph) {
+		this.graph = graph;
 	}
 
 	/**

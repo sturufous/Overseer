@@ -26,6 +26,7 @@ export interface Server {
   eventTypesHandled: string;
   serverUser: string;
   jorelHostIp: string;
+  databaseInterruptions: string[][];
 }
 
 export interface Storage {
@@ -53,6 +54,7 @@ export interface Mail {
 
 export interface HostUrl {
   hostUrl: string;
+  graph: boolean;
 }
 
 @Injectable({

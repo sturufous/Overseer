@@ -70,7 +70,8 @@ export class ServerDetailsComponent {
     },
     series: [{
         name: 'Thread Duration (seconds)',
-        data: []
+        data: [],
+        color: '#0072bc'
     }]
 };
 
@@ -167,12 +168,12 @@ public options2:any = {
         this.dataPoint2 = { x: this.server.timestamp, y: Number(this.server.activeThreads) };
 
         var series = this.chart1.series[0];
-        if (series.data.length > 1000) {
+        if (series.data.length > 1200) {
             series.data[0].remove(false, false)
         }
 
         var series = this.chart2.series[0];
-        if (series.data.length > 1000) {
+        if (series.data.length > 1200) {
             series.data[0].remove(false, false)
         }
 
