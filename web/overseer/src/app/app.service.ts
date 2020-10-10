@@ -55,6 +55,7 @@ export interface Mail {
 export interface HostUrl {
   hostUrl: string;
   graph: boolean;
+  seriesOffset: number;
 }
 
 @Injectable({

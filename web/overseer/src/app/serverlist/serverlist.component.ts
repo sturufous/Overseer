@@ -85,31 +85,39 @@ export class ServerListComponent {
           useUTC: false
       }});
 
-    this.hostInitializer = setInterval(() => {
+      this.hostInitializer = setInterval(() => {
         
-        if(this.serverListService.configUrls.length > 0) {
-          for(var idx=0; idx < this.serverListService.configUrls.length; idx++) {
-            this.displayDuration(idx); // api call
-            var series = this.chart1.series;
-            if(series.length == 0) {
-              if(this.configs.length > 0) {
-                for(var idx2=0; idx2 < this.configs.length; idx2++) {
-                  if(this.serverListService.configUrls[idx2].graph) {
-                    this.chart1.addSeries({name: this.configs[idx2].instanceName, color: this.splineColors[idx2], data: []});
-                  }
+      if(this.serverListService.configUrls.length > 0) {
+        for(var idx=0; idx < this.serverListService.configUrls.length; idx++) {
+          this.displayDuration(idx); // api call
+          var series = this.chart1.series;
+          if(series.length == 0) {
+            if(this.configs.length > 0) {
+              var seriesIndex1 = 0;
+              for(var idx2=0; idx2 < this.configs.length; idx2++) {
+                if(this.serverListService.configUrls[idx2].graph) {
+                  this.chart1.addSeries({name: this.configs[idx2].instanceName, color: this.splineColors[idx2], data: []});
+                  this.serverListService.configUrls[idx2].seriesOffset = seriesIndex1;
+                  seriesIndex1++;
                 }
               }
             }
+          }
 
-            if(this.configs.length > 0) {
-              this.dataPoint1 = { x: this.configs[idx].timestamp, y: Number(this.configs[idx].duration) };
-
-              if (series[idx].data.length > 1200) {
-                  series[idx].data[0].remove(false, false)
+          if(this.configs.length > 0) {
+            this.dataPoint1 = { x: this.configs[idx].timestamp, y: Number(this.configs[idx].duration) };
+debugger;
+            var seriesIdx2 = this.serverListService.configUrls[idx].seriesOffset;
+            if(seriesIdx2 > -1) {
+              if (series[seriesIdx2].data.length > 1200) {
+                  series[seriesIdx2].data[0].remove(false, false)
               }
-
-              series[idx].addPoint(this.dataPoint1);
             }
+
+            if(seriesIdx2 > -1) {
+              series[seriesIdx2].addPoint(this.dataPoint1);
+            }
+          }
         }
       }
     }, 3000);

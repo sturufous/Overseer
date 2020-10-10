@@ -72,6 +72,7 @@ public class OverseerController {
     		Jorel2HostsDto hostDto = new Jorel2HostsDto();
     		hostDto.setHostUrl("host=" + hostDao.getHostIp() + "&port=" + hostDao.getPort());
     		hostDto.setGraph(hostDao.getGraph());
+    		hostDto.setSeriesOffset(-1);
     		hostList.add(hostDto);
     	}
     	
