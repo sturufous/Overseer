@@ -21,6 +21,7 @@ export class ServerListComponent {
   dataPoint1: any;
   chart1: any;
   hostThreads: any[] = [];
+  seriesLength: number = 0;
   splineColors: string[] = ["#0072bc","#188d0c","#f7941d", "#ed1c24","#7b35b0", "#f7941d","#d2027d", "#2e3192", "#019fdb", "#a0410d", "9e005d", "#00746b"];
 
   public options1:any = {
@@ -30,6 +31,22 @@ export class ServerListComponent {
         backgroundColor: '#fafafa',
         events: {
         }
+    },
+    rangeSelector: {
+      buttons: [{
+          count: 1,
+          type: 'minute',
+          text: '1M'
+      }, {
+          count: 5,
+          type: 'minute',
+          text: '5M'
+      }, {
+          type: 'all',
+          text: 'All'
+      }],
+      inputEnabled: false,
+      selected: 0
     },
     title: {
         text: 'Last Thread Duration',
@@ -106,11 +123,15 @@ export class ServerListComponent {
 
           if(this.configs.length > 0) {
             this.dataPoint1 = { x: this.configs[idx].timestamp, y: Number(this.configs[idx].duration) };
-debugger;
+
             var seriesIdx2 = this.serverListService.configUrls[idx].seriesOffset;
             if(seriesIdx2 > -1) {
-              if (series[seriesIdx2].data.length > 1200) {
-                  series[seriesIdx2].data[0].remove(false, false)
+              if (this.seriesLength > 20) {
+                debugger;
+                //series[seriesIdx2].data.splice(0, seriesLen - 100);
+                //for(var point=seriesLen - 100; point > 0; point--) {
+                  series[seriesIdx2].data[0].remove();
+                //}
               }
             }
 
@@ -120,6 +141,7 @@ debugger;
           }
         }
       }
+      this.seriesLength++;
     }, 3000);
   }
 

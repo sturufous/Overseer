@@ -25,7 +25,7 @@ public class StorageResponse {
 	}
 	
 	public String getAvHost() {
-		return archiveTo;
+		return avHost;
 	}
 	
 	public void setAvHost(String value) {
