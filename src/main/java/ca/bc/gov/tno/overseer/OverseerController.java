@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.management.Attribute;
 import javax.management.AttributeList;
+import javax.management.JMX;
 import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
 import javax.management.remote.JMXConnector;
@@ -217,6 +218,33 @@ public class OverseerController {
 		return output;
 	}
 	
+	@CrossOrigin(origins = {"*"})
+    @RequestMapping(value = "/api/stop", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<String> stop(@RequestParam String host, @RequestParam String port) {
+		
+		ResponseEntity<String> output = null; 
+		MBeanServerConnection mbsc = null;
+		
+	    try {
+	 	    HttpHeaders responseHeaders = new HttpHeaders();
+	 	    responseHeaders.set("Content-Type", "application/json");
+	 	    
+	 	    mbsc = getBeanServerConnection(host, port);
+	 	    
+	 	    ObjectName objName = new ObjectName("Jorel2Instance:name=jorel2Mbean");
+	 	    //Jorel2ProxyBean mbeanProxy = JMX.newMBeanProxy(mbsc, objName, Jorel2ProxyBean.class, true);
+	 	    mbsc.invoke(objName, "stop", null, null);
+	 			 		
+	 	    output = new ResponseEntity<String>("{value: \"Done.\"}", responseHeaders, HttpStatus.CREATED);
+	
+	    } catch (Exception e) {
+			mbeanConnections.remove(host);
+	    	System.out.println(e);
+	    }
+		
+		return output;
+	}
+		
 	private MBeanServerConnection getBeanServerConnection(String host, String port) {
 		
 		MBeanServerConnection mbsc = null;

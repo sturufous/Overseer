@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { Server, Storage, Mail, ServerListService } from '../app.service';
 import { ActivatedRoute } from '@angular/router';
-import * as Highcharts from 'highcharts';
 import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
 import { Title } from '@angular/platform-browser';
+//import * as Highcharts from 'highcharts';
+import * as Highcharts from 'highcharts/highstock';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -39,6 +40,7 @@ export class ServerDetailsComponent {
   hideSt: boolean = true;
   hideMl: boolean = true;
   hostId: number;
+
   public options1:any = {
         
     chart: {
@@ -46,6 +48,9 @@ export class ServerDetailsComponent {
         backgroundColor: '#fafafa',
         events: {
         }
+    },
+    rangeSelector: {
+      enabled: false
     },
     title: {
         text: 'Last Thread Duration',
@@ -59,7 +64,7 @@ export class ServerDetailsComponent {
     },
     yAxis: {
         title: {
-        text: 'Thread Duration (seconds)'
+        text: 'Seconds'
         }
     },
     legend: {
@@ -90,12 +95,15 @@ public options2:any = {
         fontWeight: "bold"
       }
   },
+  rangeSelector: {
+    enabled: false
+  },
   xAxis: {
       type: 'datetime',
   },
   yAxis: {
       title: {
-      text: 'Active Thread Count'
+      text: 'Count'
       }
   },
   legend: {
@@ -150,8 +158,8 @@ public options2:any = {
   ngOnInit() {
     this.serverListService.loadHosts();
 
-    this.chart1 = Highcharts.chart('container1', this.options1);
-    this.chart2 = Highcharts.chart('container2', this.options2);
+    this.chart1 = Highcharts.stockChart('container1', this.options1);
+    this.chart2 = Highcharts.stockChart('container2', this.options2);
 
     Highcharts.setOptions({
       time: {
@@ -167,7 +175,7 @@ public options2:any = {
         this.dataPoint1 = { x: this.server.timestamp, y: Number(this.server.duration) };
         this.dataPoint2 = { x: this.server.timestamp, y: Number(this.server.activeThreads) };
 
-        var series = this.chart1.series[0];
+        /* var series = this.chart1.series[0];
         if (series.data.length > 1200) {
             series.data[0].remove(false, false)
         }
@@ -175,7 +183,7 @@ public options2:any = {
         var series = this.chart2.series[0];
         if (series.data.length > 1200) {
             series.data[0].remove(false, false)
-        }
+        } */
 
         this.chart1.series[0].addPoint(this.dataPoint1);
         this.chart2.series[0].addPoint(this.dataPoint2);

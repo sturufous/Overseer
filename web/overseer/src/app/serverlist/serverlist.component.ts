@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Server, Storage, ServerListService } from '../app.service';
+import { Server, Stopped, ServerListService } from '../app.service';
 import * as Highcharts from 'highcharts';
 
 @Component({
@@ -23,6 +23,7 @@ export class ServerListComponent {
   hostThreads: any[] = [];
   seriesLength: number = 0;
   splineColors: string[] = ["#0072bc","#188d0c","#f7941d", "#ed1c24","#7b35b0", "#f7941d","#d2027d", "#2e3192", "#019fdb", "#a0410d", "9e005d", "#00746b"];
+  shutdownMsg: Stopped;
 
   public options1:any = {
         
@@ -31,22 +32,6 @@ export class ServerListComponent {
         backgroundColor: '#fafafa',
         events: {
         }
-    },
-    rangeSelector: {
-      buttons: [{
-          count: 1,
-          type: 'minute',
-          text: '1M'
-      }, {
-          count: 5,
-          type: 'minute',
-          text: '5M'
-      }, {
-          type: 'all',
-          text: 'All'
-      }],
-      inputEnabled: false,
-      selected: 0
     },
     title: {
         text: 'Last Thread Duration',
@@ -81,6 +66,14 @@ export class ServerListComponent {
     this.serverListService.getConfig(idx)
       .subscribe(
         (data: Server) => this.configs[idx] = { ...data }, // success path
+        error => this.error = error // error path
+      );
+  }
+
+  shutdownServer(idx:number) {
+    this.serverListService.stopServer(idx)
+      .subscribe(
+        (data: Stopped) => this.shutdownMsg = { ...data }, // success path
         error => this.error = error // error path
       );
   }
@@ -126,12 +119,12 @@ export class ServerListComponent {
 
             var seriesIdx2 = this.serverListService.configUrls[idx].seriesOffset;
             if(seriesIdx2 > -1) {
-              if (this.seriesLength > 20) {
+              if (this.seriesLength == 1200) {
                 debugger;
-                //series[seriesIdx2].data.splice(0, seriesLen - 100);
-                //for(var point=seriesLen - 100; point > 0; point--) {
+                //for(var point=this.seriesLength - 1200; point > 0; point--) {
                   series[seriesIdx2].data[0].remove();
                 //}
+                this.seriesLength = 1200;
               }
             }
 
@@ -141,13 +134,17 @@ export class ServerListComponent {
           }
         }
       }
-      this.seriesLength++;
+      if(this.seriesLength < 1200) {
+        this.seriesLength++;
+      }
     }, 3000);
   }
 
-  restartServer($event: MouseEvent, config: Server) {
+  restartServer($event: MouseEvent, idx: number) {
     $event.preventDefault();
-    confirm("Restart server " + config.instanceName + "?")
+    if(confirm("Restart server " + this.configs[idx].instanceName + "?")) {
+      this.shutdownServer(idx);
+    }
   }
 
    threadImageFile(server:Server) {

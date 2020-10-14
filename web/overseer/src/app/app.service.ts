@@ -58,6 +58,10 @@ export interface HostUrl {
   seriesOffset: number;
 }
 
+export interface Stopped {
+  value: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -111,6 +115,15 @@ export class ServerListService {
     return this.http.get<Mail>("http://localhost:8080/api/mail?" + this.configUrls[idx].hostUrl)
       .pipe(
         retry(3), // retry a failed request up to 3 times
+        catchError(this.handleError) // then handle the error
+      );
+  }
+
+  stopServer(idx:number) {
+    debugger;
+    return this.http.get<Stopped>("http://localhost:8080/api/stop?" + this.configUrls[idx].hostUrl)
+      .pipe(
+        retry(0), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error
       );
   }
