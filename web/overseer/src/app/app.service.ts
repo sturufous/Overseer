@@ -56,6 +56,7 @@ export interface HostUrl {
   hostUrl: string;
   graph: boolean;
   seriesOffset: number;
+  lineColor: string;
 }
 
 export interface Stopped {

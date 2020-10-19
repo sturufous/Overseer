@@ -26,6 +26,8 @@ public class Jorel2HostsDao implements java.io.Serializable {
 	private String description;
 	private Boolean active;
 	private Boolean graph;
+	private BigDecimal sortOrder;
+	private String lineColor;
 	
 	public Jorel2HostsDao() {
 	}
@@ -86,6 +88,24 @@ public class Jorel2HostsDao implements java.io.Serializable {
 		this.graph = graph;
 	}
 
+	@Column(name = "SORT_ORDER", precision = 38, scale = 0)
+	public BigDecimal getSortOrder() {
+		return this.sortOrder;
+	}
+
+	public void setSortOrder(BigDecimal sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
+	@Column(name = "LINE_COLOR", length = 20)
+	public String getLineColor() {
+		return this.lineColor;
+	}
+
+	public void setLineColor(String lineColor) {
+		this.lineColor = lineColor;
+	}
+
 	/**
 	 * Get a list of all Jorel2 hosts that can be monitored by Overseer. 
 	 * 
@@ -94,7 +114,7 @@ public class Jorel2HostsDao implements java.io.Serializable {
 	 */
 	public static List<Jorel2HostsDao> getJorel2Hosts(Session session) {
 		
-		String sqlStmt = "from Jorel2HostsDao where active = true";
+		String sqlStmt = "from Jorel2HostsDao where active = true order by sortOrder";
 
 		Query<Jorel2HostsDao> query = session.createQuery(sqlStmt, Jorel2HostsDao.class);
         List<Jorel2HostsDao> results = query.getResultList();

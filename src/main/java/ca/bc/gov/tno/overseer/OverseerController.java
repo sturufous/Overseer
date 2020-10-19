@@ -74,6 +74,7 @@ public class OverseerController {
     		hostDto.setHostUrl("host=" + hostDao.getHostIp() + "&port=" + hostDao.getPort());
     		hostDto.setGraph(hostDao.getGraph());
     		hostDto.setSeriesOffset(-1);
+    		hostDto.setLineColor(hostDao.getLineColor());
     		hostList.add(hostDto);
     	}
     	
@@ -232,7 +233,6 @@ public class OverseerController {
 	 	    mbsc = getBeanServerConnection(host, port);
 	 	    
 	 	    ObjectName objName = new ObjectName("Jorel2Instance:name=jorel2Mbean");
-	 	    //Jorel2ProxyBean mbeanProxy = JMX.newMBeanProxy(mbsc, objName, Jorel2ProxyBean.class, true);
 	 	    mbsc.invoke(objName, "stop", null, null);
 	 			 		
 	 	    output = new ResponseEntity<String>("{value: \"Done.\"}", responseHeaders, HttpStatus.CREATED);

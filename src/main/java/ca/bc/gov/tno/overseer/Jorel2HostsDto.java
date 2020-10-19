@@ -5,6 +5,7 @@ public class Jorel2HostsDto {
 	String hostUrl = "Uninitialized";
 	Boolean graph = true;
 	Integer seriesOffset = -1;
+	String lineColor = "Uninitialized";
 
 	public String getHostUrl() {
 		return this.hostUrl;
@@ -28,5 +29,13 @@ public class Jorel2HostsDto {
 	
 	public void setSeriesOffset(Integer seriesOffset) {
 		this.seriesOffset = seriesOffset;
+	}
+
+	public String getLineColor() {
+		return this.lineColor;
+	}
+	
+	public void setLineColor(String lineColor) {
+		this.lineColor = lineColor;
 	}
 }

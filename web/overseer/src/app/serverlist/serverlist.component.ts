@@ -22,7 +22,7 @@ export class ServerListComponent {
   chart1: any;
   hostThreads: any[] = [];
   seriesLength: number = 0;
-  splineColors: string[] = ["#0072bc","#188d0c","#f7941d", "#ed1c24","#7b35b0", "#f7941d","#d2027d", "#2e3192", "#019fdb", "#a0410d", "9e005d", "#00746b"];
+  //splineColors: string[] = ["#0072bc","#188d0c","#f7941d", "#ed1c24","#7b35b0", "#f7941d","#d2027d", "#2e3192", "#019fdb", "#a0410d", "9e005d", "#00746b"];
   shutdownMsg: Stopped;
 
   public options1:any = {
@@ -106,7 +106,9 @@ export class ServerListComponent {
               var seriesIndex1 = 0;
               for(var idx2=0; idx2 < this.configs.length; idx2++) {
                 if(this.serverListService.configUrls[idx2].graph) {
-                  this.chart1.addSeries({name: this.configs[idx2].instanceName, color: this.splineColors[idx2], data: []});
+debugger;
+                  var lineColor = "#" + this.serverListService.configUrls[idx2].lineColor;
+                  this.chart1.addSeries({name: this.configs[idx2].instanceName, color: lineColor, data: []});
                   this.serverListService.configUrls[idx2].seriesOffset = seriesIndex1;
                   seriesIndex1++;
                 }
@@ -124,7 +126,6 @@ export class ServerListComponent {
                 //for(var point=this.seriesLength - 1200; point > 0; point--) {
                   series[seriesIdx2].data[0].remove();
                 //}
-                this.seriesLength = 1200;
               }
             }
 
