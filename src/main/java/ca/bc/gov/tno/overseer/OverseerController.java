@@ -39,22 +39,24 @@ public class OverseerController {
 	@Inject
 	DevDataSourceConfig config;
 	
-	/* @PostConstruct
+	@PostConstruct
 	private void init() {
 		try {
-			Runtime rt = Runtime.getRuntime();
+			String os = System.getProperty("os.name");
 			String url = "http://localhost:8080/overseer/serverlist";
-			rt.exec("rundll32 url.dll,FileProtocolHandler " + url);
 			
-			// Mac
-			//Runtime rt = Runtime.getRuntime();
-			//String url = "http://stackoverflow.com";
-			//rt.exec("open " + url);
+			if(os.contains("Windows")) {
+				Runtime rt = Runtime.getRuntime();
+				rt.exec("rundll32 url.dll,FileProtocolHandler " + url);
+			} else if(os.contains("Mac")) {
+				Runtime rt = Runtime.getRuntime();
+				rt.exec("open " + url);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	} */
+	} 
 	
 	@CrossOrigin(origins = {"*"})
     @RequestMapping(value = "/api/hosts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

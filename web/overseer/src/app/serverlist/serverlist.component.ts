@@ -106,7 +106,6 @@ export class ServerListComponent {
               var seriesIndex1 = 0;
               for(var idx2=0; idx2 < this.configs.length; idx2++) {
                 if(this.serverListService.configUrls[idx2].graph) {
-debugger;
                   var lineColor = "#" + this.serverListService.configUrls[idx2].lineColor;
                   this.chart1.addSeries({name: this.configs[idx2].instanceName, color: lineColor, data: []});
                   this.serverListService.configUrls[idx2].seriesOffset = seriesIndex1;

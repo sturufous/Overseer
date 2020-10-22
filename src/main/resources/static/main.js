@@ -1014,7 +1014,6 @@ class ServerListComponent {
         this.configs = [];
         this.hostThreads = [];
         this.seriesLength = 0;
-        this.splineColors = ["#0072bc", "#188d0c", "#f7941d", "#ed1c24", "#7b35b0", "#f7941d", "#d2027d", "#2e3192", "#019fdb", "#a0410d", "9e005d", "#00746b"];
         this.options1 = {
             chart: {
                 type: 'spline',
@@ -1084,7 +1083,8 @@ class ServerListComponent {
                             var seriesIndex1 = 0;
                             for (var idx2 = 0; idx2 < this.configs.length; idx2++) {
                                 if (this.serverListService.configUrls[idx2].graph) {
-                                    this.chart1.addSeries({ name: this.configs[idx2].instanceName, color: this.splineColors[idx2], data: [] });
+                                    var lineColor = "#" + this.serverListService.configUrls[idx2].lineColor;
+                                    this.chart1.addSeries({ name: this.configs[idx2].instanceName, color: lineColor, data: [] });
                                     this.serverListService.configUrls[idx2].seriesOffset = seriesIndex1;
                                     seriesIndex1++;
                                 }
@@ -1095,10 +1095,9 @@ class ServerListComponent {
                         this.dataPoint1 = { x: this.configs[idx].timestamp, y: Number(this.configs[idx].duration) };
                         var seriesIdx2 = this.serverListService.configUrls[idx].seriesOffset;
                         if (seriesIdx2 > -1) {
-                            if (this.seriesLength > 1200) {
+                            if (this.seriesLength == 1200) {
                                 debugger;
-                                //series[seriesIdx2].data.splice(0, seriesLen - 100);
-                                //for(var point=seriesLen - 100; point > 0; point--) {
+                                //for(var point=this.seriesLength - 1200; point > 0; point--) {
                                 series[seriesIdx2].data[0].remove();
                                 //}
                             }
@@ -1109,7 +1108,9 @@ class ServerListComponent {
                     }
                 }
             }
-            this.seriesLength++;
+            if (this.seriesLength < 1200) {
+                this.seriesLength++;
+            }
         }, 3000);
     }
     restartServer($event, idx) {
