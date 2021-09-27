@@ -350,10 +350,10 @@
           <td><b>Run time:</b></td><td colspan="2">{{ server.instanceRunTime }}</td><td><b>Max Thread Duration:</b></td><td>{{ server.maxDuration }} secs</td>
         </tr>
         <tr>
-          <td><b>Server Architecture:</b></td><td colspan="2">{{ server.serverDetails }}</td><td><b>User:</b></td><td>{{ server.serverUser }}</td>
+          <td style="white-space: nowrap"><b>Server Details:</b></td><td colspan="2">{{ server.serverDetails }}</td><td><b>User:</b></td><td>{{ server.serverUser }}</td>
         </tr>
         <tr>
-          <td style="font-size: 10pt; margin-bottom: 2px; font-weight: bold">Database Interruptions:</td>
+          <td style="font-size: 10pt; margin-bottom: 2px; font-weight: bold; white-space: nowrap; vertical-align: top;">DB Interruptions:&nbsp;&nbsp;</td>
           <td colspan="4">
             <span *ngFor="let interruption of server.databaseInterruptions" style="padding-right: 20px; display: inline-block">{{ interruption[0] }} {{ interruption[1] }}</span>
           </td>
